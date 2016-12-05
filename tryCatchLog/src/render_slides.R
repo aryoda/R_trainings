@@ -2,7 +2,7 @@ library(rmarkdown)
 library(revealjs)
 
 file.name <- "introduction"
-path.to.file <- "vignettes/"
+path.to.file <- "tryCatchLog/src"
 
 # , slide_level = 3
 # Good hightlights: tango

@@ -30,18 +30,6 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-
-
-## Table of contents
-
-TODO
-
-[Open printable version of these slides](?print-pdf)
-
-
-
-## Condition handling in standard R
-
 <style type="text/css">
 
   .reveal .slides .title {
@@ -105,7 +93,21 @@ TODO
 
 
 
-The execution of an R script can be interrupted to signal special *conditions* (states)
+## Table of contents
+
+[Condition handling in standard R](#/condition-handling-in-standard-r)
+
+TODO
+
+[Open printable version of these slides](?print-pdf)
+
+
+
+# Condition handling in standard R
+
+## What is a condition?
+
+The execution of an R script can be interrupted to signal special states (*conditions*).
 
 Examples:
 

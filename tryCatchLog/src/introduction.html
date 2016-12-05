@@ -119,20 +119,12 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
     <h3 class="date">Dec. 2016</h3>
 </section>
 
-<section id="license" class="slide level2">
-<h1>License</h1>
+<section id="license-gpl-3" class="slide level2">
+<h1>License (GPL-3)</h1>
 <p>Copyright (C) 2016 Juergen Altfeld (<a href="mailto:R@altfeld-im.de">R@altfeld-im.de</a>)</p>
 <p>This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.</p>
 <p>This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.</p>
 <p>You should have received a copy of the GNU General Public License along with this program. If not, see <a href="http://www.gnu.org/licenses/" class="uri">http://www.gnu.org/licenses/</a>.</p>
-</section>
-<section id="table-of-contents" class="slide level2">
-<h1>Table of contents</h1>
-<p>TODO</p>
-<p><a href="?print-pdf">open printable version of these slides</a></p>
-</section>
-<section id="condition-handling-in-standard-r" class="slide level2">
-<h1>Condition handling in standard R</h1>
 <style type="text/css">
 
   .reveal .slides .title {
@@ -193,7 +185,16 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
   }
 
 </style>
-<p>The execution of an R script can be interrupted to signal special <em>conditions</em> (states)</p>
+</section>
+<section id="table-of-contents" class="slide level2">
+<h1>Table of contents</h1>
+<p><a href="#//condition-handling-in-standard-r">Condition handling in standard R</a></p>
+<p>TODO</p>
+<p><a href="?print-pdf">Open printable version of these slides</a></p>
+</section>
+<section><section id="condition-handling-in-standard-r" class="titleslide slide level1"><h1>Condition handling in standard R</h1></section><section id="what-is-a-condition" class="slide level2">
+<h1>What is a condition?</h1>
+<p>The execution of an R script can be interrupted to signal special states (<em>conditions</em>).</p>
 <p>Examples:</p>
 <ul>
 <li>errors</li>
@@ -201,8 +202,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li>messages</li>
 <li>user interrupts (by hitting CTRL + C/BRK or ESC)</li>
 </ul>
-</section>
-<section id="condition-examples" class="slide level2">
+</section><section id="condition-examples" class="slide level2">
 <h1>Condition examples</h1>
 <p>An error condition:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">log</span>(<span class="st">&quot;text&quot;</span>)   <span class="co"># throws an error</span></code></pre></div>
@@ -211,7 +211,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">log</span>(-<span class="dv">1</span>)                <span class="co"># throws a warning</span></code></pre></div>
 <pre><code>## Warning in log(-1): NaNs produced</code></pre>
 <pre><code>## [1] NaN</code></pre>
-</section>
+</section></section>
 <section><section id="throw-your-own-conditions" class="titleslide slide level1"><h1>Throw your own conditions</h1></section><section id="error" class="slide level2">
 <h1>Error</h1>
 <p>Based on a “condition” (expression) to recognize an invalid state:</p>
