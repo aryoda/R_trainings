@@ -1,3 +1,6 @@
+Liste der Styles im Theme:
+https://github.com/hakimel/reveal.js/blob/master/css/theme/template/theme.scss
+
 
 <style type="text/css">
 .reveal section code{
@@ -134,4 +137,110 @@ I think you can get the slide as far up the page as you want with the CSS below.
 .reveal p:first-child { margin-top: 0px; }
 .reveal .slides > section { padding: 0px; }
 .reveal div.slides { position: absolute; top: -5%; }
+
+
+------------
+
+! https://stackoverflow.com/questions/39314402/list-numbers-become-translucent-if-i-make-the-background-translucent
+
+Consider an ordered list and an un-ordered list like this-
+
+<ol>
+    <li> something</li>
+    <li> something</li>
+</ol>
+<ul>
+    <li> something</li>
+    <li> something</li>
+</ul>
+
+To style the list item inside an <ol> tag, you need to use-
+
+ol li{...}
+
+This would style any li tag which is a descendent of ol tag.
+
+But if you want all li items to be of same color(say black),
+
+li{...}
+
+Even this is sufficient, because ultimately, all of them are list items.
+
+
+---
+
+ol {
+  list-style-type: none; /* This removes the old numbers */
+  padding: 20px;
+  border-radius: 6px;
+  background: rgba(255,255,255,0.2);
+  width: 300px;
+  margin: 60px auto;
+}
+
+ol li {
+  counter-increment: counter; /* This saves the values to counter */ 
+  margin-bottom: 5px;
+}
+ol li::before {
+  content: counter(counter); /* This applies counter to pseudo content */
+  margin-right: 10px;
+  font-size: 1em;
+  color: black;
+  font-weight: bold;
+}
+
+------------
+
+!!!
+
+https://stackoverflow.com/questions/23204784/how-do-i-make-code-samples-bigger
+
+Q: code block (pre and code tags) seems to always have a max height on it. Past a certain height it wants to scroll rather than growing the box.
+
+A: The specific CSS is max-height set on .reveal pre code. Just overwrite this value with your own CSS rules and either set it to a larger value or to initial
+
+-------------
+
+!!!
+https://stackoverflow.com/questions/36777699/adding-title-slide-image-to-rmarkdown-slides-with-reveal-js
+
+make a blank title and then have an image as your data background on your title slide. You can do anything else you want on said title slide as well. I use divs to put a nice big title in the middle of the slide.
+
+---
+title: 
+output: revealjs::revealjs_presentation
+---
+
+## {data-background="http://img1.wikia.nocookie.net/__cb20100706023807/familyguy/images/c/c7/Tauntaun.png"}
+
+
+-----------
+
+Add background image to slides
+https://stackoverflow.com/questions/28916359/rstudio-0-98-1028-add-background-image-only-to-title-slide
+
+For slides:
+
+<style>
+/* Your other css */
+
+.section .reveal .state-background {
+    background: url(foo1.png);
+    background-position: center center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+}
+</style>
+
+For the title slide:
+Just change your title-slide { /* do stuff */ } to .section .reveal .state-background { /* do stuff */ }
+
+
+-------------
+
+Slides links ausrichten:
+
+.reveal .slides { margin: 0; }
 

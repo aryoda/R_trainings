@@ -1,0 +1,34 @@
+---
+title:
+output: 
+        revealjs::revealjs_presentation:
+        self_contained: false
+        reveal_plugins: ["notes", "search", "zoom"]
+---
+
+## list items
+
+<style type="text/css">
+  .reveal p {
+    text-align: left;
+  }
+  .reveal ul {
+    display: block;
+  }
+  .reveal ol {
+    display: block;
+  }  
+</style>
+
+* a
+* picture
+* says more
+* than a thousand words
+
+or
+
+1. item 1
+1. item 2
+
+<a href="http://www.heise.de/" target="_blank">Open link in a new window</a>
+
