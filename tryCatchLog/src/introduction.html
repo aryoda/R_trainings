@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="generator" content="pandoc">
-  <meta name="author" content="Jürgen Altfeld (TODO (c) and License)" />
-  <title>Error handling in R with tryCatchLog (catch, log, post-mortem analysis)</title>
+  <meta name="author" content="Jürgen Altfeld" />
+  <title>Error handling in R with tryCatchLog: Catch, log and post-mortem analysis</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
@@ -114,9 +114,12 @@ code > span.in { color: #8f5902; font-weight: bold; font-style: italic; } /* Inf
     <div class="slides">
 
 <section>
-    <h1 class="title">Error handling in R with tryCatchLog<br>(catch, log, post-mortem analysis)</h1>
-    <h2 class="author">Jürgen Altfeld (TODO (c) and License)</h2>
-    <h3 class="date">Dec. 2016</h3>
+    <h1 class="title">Error handling in R with tryCatchLog:<br>Catch, log and post-mortem analysis</h1>
+    <h2 class="author">Jürgen Altfeld</h2>
+    <h3 class="date">Dec. 2016<br><br><br>
+<p style="font-size:0.5em">
+These slides have been created with RMarkdown and the package <a href="https://github.com/rstudio/revealjs">revealjs</a>
+<p></h3>
 </section>
 
 <section id="license-gpl-3" class="slide level2">
@@ -126,6 +129,7 @@ code > span.in { color: #8f5902; font-weight: bold; font-style: italic; } /* Inf
 <p>This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.</p>
 <p>This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.</p>
 <p>You should have received <a href="LICENSE">a copy of the GNU General Public License</a> along with this program. If not, see <a href="http://www.gnu.org/licenses/" class="uri">http://www.gnu.org/licenses/</a>.</p>
+<!-- !!! NEVER EVER ADD HTML COMMENTS INSIDE OF THE STYLE TAG SINCE IT BREAKS THE STYLE SOMETIMES !!! -->
 <style type="text/css">
 
   .reveal .slides .title {
@@ -166,7 +170,8 @@ code > span.in { color: #8f5902; font-weight: bold; font-style: italic; } /* Inf
     color: blue;
   }
 
-  .reveal section p {
+
+  .reveal section > p {
     text-align: left;
     font-size: 70%;
   }
@@ -181,7 +186,7 @@ code > span.in { color: #8f5902; font-weight: bold; font-style: italic; } /* Inf
     display: block;
     font-size: 70%;
   }
-
+  
   .reveal section code {
     font-size: 90%;
     font-familie: Courier
@@ -593,22 +598,73 @@ Browse[<span class="dv">1</span>]&gt;<span class="st"> </span><span class="kw">t
 [<span class="dv">1</span>] <span class="st">&quot;character&quot;</span>
 Browse[<span class="dv">1</span>]&gt;<span class="st"> </span></code></pre></div>
 <p>By looking at the value and data type of the variable <code>value</code> it is easy to identify the reason for error.</p>
-<p><em>You can exit the debugger with “Q” now (or “f” followed by “0”).</em></p>
-</section><section id="todo-trycatchlog-functions-overview" class="slide level2">
-<h1>TODO: tryCatchLog functions overview</h1>
+<p><em>You can exit the debugger with “Q” (or “f” followed by “0”) now.</em></p>
+</section><section id="post-mortem-debugging-limitations" class="slide level2">
+<h1>Post-mortem debugging: Limitations</h1>
+<p>R dump files (created with <code>save.image</code>) do <strong>not</strong> contain the packages loaded when the dump file was created and a dump loaded into memory does <strong>not</strong> use exactly the same search path to find objects during post-mortem debugging.</p>
+<p>This means:</p>
 <ul>
-<li>tryCatchLog</li>
-<li>tryLog</li>
-<li>options</li>
+<li>the program state is not exactly reproducible if objects are stored within a package namespace</li>
+<li>you cannot step through your source code in a reproducible way after loading the image if your source code calls functions of non-default packages</li>
 </ul>
-</section><section id="todo-best-practices" class="slide level2">
-<h1>TODO: Best practices</h1>
+<p>For more details see: <a href="https://github.com/aryoda/tryCatchLog/issues/12" class="uri">https://github.com/aryoda/tryCatchLog/issues/12</a></p>
+</section></section>
+<section><section id="trycatchlog-functions-reference" class="titleslide slide level1"><h1><code>tryCatchLog</code> functions reference</h1></section><section id="trycatchlog" class="slide level2">
+<h1>tryCatchLog()</h1>
+<p>Function signature:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">tryCatchLog</span>(expr,
+  <span class="dt">error =</span> <span class="kw">getOption</span>(<span class="st">&quot;error&quot;</span>, <span class="dt">default =</span> stop),
+  <span class="dt">finally =</span> <span class="ot">NULL</span>,
+  <span class="dt">dump.errors.to.file =</span> <span class="kw">getOption</span>(<span class="st">&quot;tryCatchLog.dump.errors.to.file&quot;</span>, <span class="ot">FALSE</span>),
+  <span class="dt">silent.warnings =</span> <span class="kw">getOption</span>(<span class="st">&quot;tryCatchLog.silent.warnings&quot;</span>, <span class="ot">FALSE</span>),
+  <span class="dt">silent.messages =</span> <span class="kw">getOption</span>(<span class="st">&quot;tryCatchLog.silent.messages&quot;</span>, <span class="ot">FALSE</span>))</code></pre></div>
+<p>This function evaluates the expression in <code>expr</code> and calls the error handler function <code>error</code> in case of an error condition. The function in <code>finally</code> is then always evaluated at the end. Conditions (errors, warnings and messages) are logged with the function call stack (including file names and line numbers). Warnings and messages can be “silenced” (only logged but not propagated to the caller) using the <code>silent.*</code> parameters.</p>
+<p>The default values of some parameters can be set globally via options to avoid repeating the same parameter values and to support an easy reconfiguration for all calls.</p>
+</section><section id="trylog" class="slide level2">
+<h1>tryLog()</h1>
+<p>Function signature:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">tryLog</span>(expr,
+  <span class="dt">dump.errors.to.file =</span> <span class="kw">getOption</span>(<span class="st">&quot;tryCatchLog.dump.errors.to.file&quot;</span>, <span class="ot">FALSE</span>),
+  <span class="dt">silent.warnings =</span> <span class="kw">getOption</span>(<span class="st">&quot;tryCatchLog.silent.warnings&quot;</span>, <span class="ot">FALSE</span>),
+  <span class="dt">silent.messages =</span> <span class="kw">getOption</span>(<span class="st">&quot;tryCatchLog.silent.messages&quot;</span>, <span class="ot">FALSE</span>))</code></pre></div>
+<p>This function is a short version of <code>tryCatchLog()</code> that traps any errors that occur during the evaluation of the expression <code>expr</code> without stopping the execution of the script (similar to <code>try</code> in R). Errors, warnings and messages are logged.</p>
+<p>In contrast to <code>tryCatchLog()</code> it returns but does not stop in case of an error and therefor does not have the error and finally parameters to pass in custom handler functions.</p>
+<p>The default values of some parameters can be set globally via options to avoid repeating the same parameter values and to support an easy reconfiguration for all calls.</p>
+</section><section id="change-global-options-of-trycatchlog" class="slide level2">
+<h1>Change global options of <code>tryCatchLog</code></h1>
+<p>You can change the default values of many options globally by initalizing them once in your code to reduce lengthy function calls later, e. g.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Initialize your own default values globally for tryLog and tryCatchLog</span>
+<span class="kw">options</span>(<span class="dt">tryCatchLog.dump.errors.to.file =</span> <span class="ot">FALSE</span>)
+<span class="kw">options</span>(<span class="dt">tryCatchLog.silent.messages     =</span> <span class="ot">TRUE</span>)
+<span class="kw">options</span>(<span class="dt">tryCatchLog.silent.warnings     =</span> <span class="ot">TRUE</span>)
+
+test &lt;-<span class="st"> </span>function() {
+  <span class="kw">message</span>(<span class="st">&quot;hello&quot;</span>)
+  <span class="kw">warning</span>(<span class="st">&quot;a warning&quot;</span>)
+}
+
+<span class="co"># Use your own default values by ommiting those parameters...</span>
+<span class="kw">tryLog</span>(<span class="kw">test</span>())
+
+<span class="co"># .. instead of using the longer version</span>
+<span class="kw">tryLog</span>(<span class="kw">test</span>(), <span class="dt">silent.warnings =</span> <span class="ot">TRUE</span>, <span class="dt">silent.messages =</span> <span class="ot">TRUE</span>, <span class="dt">dump.errors.to.file =</span> <span class="ot">FALSE</span>)</code></pre></div>
+</section><section id="todo-trycatchlog-best-practices" class="slide level2">
+<h1>TODO: <code>tryCatchLog</code> Best Practices</h1>
+<ol start="0" type="1">
+<li><p>Use options to change the default values globally</p></li>
+<li><p>Avoid that too many dump files filling your disk space</p>
+<p>you should omit the  parameter and instead set its default value using the option  in your  file instead (or in a startup R script that sources your actual script). In case of an error (that you can reproduce) you set the option to  and re-run your script. Then you are able to examine the program state that led to the error by debugging the saved dump file.</p></li>
+<li><p>Enable source code references (source file names and line numbers)} in the stack traces</p>
+<p>you must set this option before executing your code:</p></li>
+<li><p>Execute your code as R batch file</p>
+<p>with  using this shell script command}:</p></li>
+</ol>
 <ul>
 <li>Options zum gezielten temporären Aktivieren von Funktionalitäten</li>
-<li>Anwendungs-Szenarios interaktiv (mit/ohne Benutzer-Interaktion) vs. Batch</li>
+<li>Anwendungs-Szenarios interaktiv (mit/ohne Benutzer-Interaktion) vs. Batch -&gt; in einem eigenen Kapitel?!</li>
 </ul>
-</section><section id="todo-summary-advantages" class="slide level2">
-<h1>TODO Summary + advantages</h1>
+</section><section id="todo-summary-advantages---prufen-ob-das-alles-erwahnt-wird" class="slide level2">
+<h1>TODO Summary + advantages - Prüfen, ob das alles erwähnt wird…</h1>
 <p>Probleme bei klassischen error handling:</p>
 <ul>
 <li>sys.calls enthält keine source code references -&gt; limitedLabels</li>

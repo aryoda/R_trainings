@@ -1,13 +1,14 @@
 ---
-title: "Error handling in R with tryCatchLog<br>(catch, log, post-mortem analysis)"
-author: Jürgen Altfeld (TODO (c) and License)
-date: Dec. 2016
+title: Error handling in R with tryCatchLog:<br>Catch, log and post-mortem analysis
+author: Jürgen Altfeld
+date: Dec. 2016<br><br><br><p style="font-size:0.5em">These slides have been created with RMarkdown and the package <a href="https://github.com/rstudio/revealjs">revealjs</a><p>
 description: some text to be displayed?
 output:
         revealjs::revealjs_presentation:
           self_contained: true
+# chalkboard added Nov. 2016: https://github.com/rstudio/revealjs/issues/42 but this requires "selfcontained" = false !!!
 #          self_contained: false
-#          reveal_plugins: ["notes", "search", "zoom"]
+#          reveal_plugins: ["notes", "search", "zoom", "chalkboard"]
           theme: white
           highlight: tango
           center: false
@@ -43,6 +44,7 @@ You should have received [a copy of the GNU General Public License](LICENSE)
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+<!-- !!! NEVER EVER ADD HTML COMMENTS INSIDE OF THE STYLE TAG SINCE IT BREAKS THE STYLE SOMETIMES !!! -->
 
 <style type="text/css">
 
@@ -84,7 +86,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     color: blue;
   }
 
-  .reveal section p {
+
+  .reveal section > p {
     text-align: left;
     font-size: 70%;
   }
@@ -99,7 +102,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     display: block;
     font-size: 70%;
   }
-
+  
   .reveal section code {
     font-size: 90%;
     font-familie: Courier
@@ -744,21 +747,128 @@ By looking at the value and data type of the variable `value` it is easy to iden
 
 
 
-## TODO:  tryCatchLog functions overview
+## Post-mortem debugging: Limitations
 
-- tryCatchLog
-- tryLog
-- options
+R dump files (created with `save.image`) do **not** contain the packages
+loaded when the dump file was created and a dump loaded into memory does
+**not** use exactly the same search path to find objects during post-mortem debugging.
+
+This means:
+
+- the program state is not exactly reproducible if objects are stored within a package namespace
+- you cannot step through your source code in a reproducible way after loading the image
+  if your source code calls functions of non-default packages
+
+For more details see: https://github.com/aryoda/tryCatchLog/issues/12
 
 
 
-## TODO: Best practices
+# `tryCatchLog` functions reference
+
+
+
+## tryCatchLog()
+
+Function signature:
+```{r eval = FALSE}
+tryCatchLog(expr,
+  error = getOption("error", default = stop),
+  finally = NULL,
+  dump.errors.to.file = getOption("tryCatchLog.dump.errors.to.file", FALSE),
+  silent.warnings = getOption("tryCatchLog.silent.warnings", FALSE),
+  silent.messages = getOption("tryCatchLog.silent.messages", FALSE))
+```
+
+This function evaluates the expression in `expr` and calls the error handler function `error` in case of an error condition.
+The function in `finally` is then always evaluated at the end.
+Conditions (errors, warnings and messages) are logged with the function call stack (including file names and line numbers).
+Warnings and messages can be "silenced" (only logged but not propagated to the caller) using the `silent.*` parameters.
+
+The default values of some parameters can be set globally via options to avoid repeating the same
+parameter values and to support an easy reconfiguration for all calls.
+
+
+
+## tryLog()
+
+Function signature:
+```{r eval = FALSE}
+tryLog(expr,
+  dump.errors.to.file = getOption("tryCatchLog.dump.errors.to.file", FALSE),
+  silent.warnings = getOption("tryCatchLog.silent.warnings", FALSE),
+  silent.messages = getOption("tryCatchLog.silent.messages", FALSE))
+```
+
+This function is a short version of `tryCatchLog()`
+that traps any errors that occur during the evaluation of the expression `expr`
+without stopping the execution of the script (similar to `try` in R).
+Errors, warnings and messages are logged.
+
+In contrast to `tryCatchLog()` it returns but does not stop in case of an error
+and therefor does not have the error and finally parameters to pass in custom handler functions.
+
+The default values of some parameters can be set globally via options to avoid repeating the same
+parameter values and to support an easy reconfiguration for all calls.
+
+
+
+## Change global options of `tryCatchLog`
+
+You can change the default values of many options globally by initalizing them once in your code
+to reduce lengthy function calls later, e. g.
+
+```{r results = "hide"}
+# Initialize your own default values globally for tryLog and tryCatchLog
+options(tryCatchLog.dump.errors.to.file = FALSE)
+options(tryCatchLog.silent.messages     = TRUE)
+options(tryCatchLog.silent.warnings     = TRUE)
+
+test <- function() {
+  message("hello")
+  warning("a warning")
+}
+
+# Use your own default values by ommiting those parameters...
+tryLog(test())
+
+# .. instead of using the longer version
+tryLog(test(), silent.warnings = TRUE, silent.messages = TRUE, dump.errors.to.file = FALSE)
+```
+
+
+
+
+## TODO: `tryCatchLog` Best Practices
+
+0. Use options to change the default values globally
+
+1. Avoid that too many dump files filling your disk space
+
+    you should omit the \code{dump.errors.to.file}
+    parameter and instead set its default value using the option \code{tryCatchLog.dump.errors.to.file} in your
+    \link{.Rprofile} file instead (or in a startup R script that sources your actual script).
+    In case of an error (that you can reproduce) you set the option to \code{TRUE} and re-run your script.
+    Then you are able to examine the program state that led to the error by debugging the saved dump file.
+
+1. Enable source code references (source file names and line numbers)} in the stack traces
+
+    you must set this option before executing your code:\cr
+    \code{options(keep.source = TRUE)}
+
+1. Execute your code as R batch file
+
+    with \code{\link{Rscript}} using this shell script command}:\cr
+    \code{Rscript -e "options(keep.source = TRUE); source('my_main_function.R')"}
+
 
 - Options zum gezielten temporären Aktivieren von Funktionalitäten
 - Anwendungs-Szenarios interaktiv (mit/ohne Benutzer-Interaktion) vs. Batch
+  -> in einem eigenen Kapitel?!
 
 
-## TODO Summary + advantages
+
+
+## TODO Summary + advantages - Prüfen, ob das alles erwähnt wird...
 
 Probleme bei klassischen error handling:
 
