@@ -838,7 +838,9 @@ tryLog(test(), silent.warnings = TRUE, silent.messages = TRUE, dump.errors.to.fi
 
 
 
-## TODO: `tryCatchLog` Best Practices
+# `tryCatchLog` Best Practices
+
+## TODO
 
 0. Use options to change the default values globally
 
@@ -868,7 +870,7 @@ tryLog(test(), silent.warnings = TRUE, silent.messages = TRUE, dump.errors.to.fi
 
 
 
-## TODO Summary + advantages - Prüfen, ob das alles erwähnt wird...
+## TODO SUMMARY with advantages - Prüfen, ob das alles erwähnt wird...
 
 Probleme bei klassischen error handling:
 
