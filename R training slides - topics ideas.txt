@@ -1,0 +1,6 @@
+Ideas for new R training slides:
+================================
+
+- Create a cheat sheet with ETL functionalities in R
+- Microbenchmark frequent R functions and their alternatives
+  (create an automatic summary in RMarkdown as cheat sheet)

@@ -1,13 +1,13 @@
 ---
-title: Error handling in R with tryCatchLog:<br>Catch, log and post-mortem analysis
+title: Error handling in R with tryCatchLog:</br>Catch, log and post-mortem analysis
 author: Jürgen Altfeld
-date: Dec. 2016<br><br><br><p style="font-size:0.5em">These slides have been created with RMarkdown and the package <a href="https://github.com/rstudio/revealjs">revealjs</a><p>
+date: Dec. 2016</br></br></br><p style="font-size:0.5em">These slides have been created with RMarkdown and the package <a href="https://github.com/rstudio/revealjs">revealjs</a><p>
 description: some text to be displayed?
 output:
         revealjs::revealjs_presentation:
           self_contained: true
-# chalkboard added Nov. 2016: https://github.com/rstudio/revealjs/issues/42 but this requires "selfcontained" = false !!!
 #          self_contained: false
+# chalkboard added Nov. 2016: https://github.com/rstudio/revealjs/issues/42 but this requires "selfcontained" = false !!!
 #          reveal_plugins: ["notes", "search", "zoom", "chalkboard"]
           theme: white
           highlight: tango
@@ -28,7 +28,7 @@ output:
 
 ![gplv3 logo](gplv3-127x51.png)
 
-Copyright (C) 2016 Juergen Altfeld (R@altfeld-im.de)
+Copyright (C) 2016 Jürgen Altfeld (R@altfeld-im.de)
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -126,18 +126,17 @@ TODO
 
 
 
+
 # Introduction into conditions in standard R
 
 ## What is a condition?
 
-The execution of an R script can be interrupted to signal special states (*conditions*).
-
-Examples:
+The execution of an R script can be interrupted to signal special states (*conditions*) like:
 
 - errors
 - warnings
-- messages
-- user interrupts (by hitting CTRL + C/BRK or ESC)
+- info messages
+- user requested interrupts (by hitting CTRL + C/BRK or ESC)
 
 
 
@@ -149,13 +148,13 @@ Examples:
 
 An error condition:
 ```{r, error = TRUE}
-log("text")   # throws an error
+log("text")   # calculating the logarithm of a text throws an error
 ```
 
 
 A warning condition:
 ```{r, results='hold'}
-log(-1)                # throws a warning
+log(-1)                # logarithm of a negative number throws a warning
 ```
 
 
@@ -170,13 +169,14 @@ http://stackoverflow.com/a/31778080/4468078
 
 ## Error
 
-Based on a "condition" (expression) to recognize an invalid state:
+Throw an error "condition" if you recognize an invalid program state:
 ```{r, error = TRUE}
 if (1 != 2)
   stop("something is wrong")
 ```
 
-Or shorter (but without a message text):
+</br>
+Or shorter (but without a way to specify an error text):
 ```{r, error = TRUE}
 stopifnot(1 == 2)
 ```
@@ -206,10 +206,13 @@ Scroll down for examples...
 By default R will stop the execution if an error occurs:
 ```{r, error = TRUE, eval = TRUE}
 options(error = NULL)  # switch to default behaviour of R
-{
+
+test <- function() {
   log("not a number")
   print("R does stop due to an error and never executes this line")
 }
+
+test()     # throws an error
 ```
 Note that the output does **not** show the `print` result since the execution stops in case of an error.
 
@@ -219,10 +222,8 @@ Note that the output does **not** show the `print` result since the execution st
 
 With the `try` function you can handle errors to continue the execution (by ignoring the error):
 ```{r, collapse = FALSE, eval = TRUE}
-{
-  try(log("not a number"))
-  print("errors can't stop me")
-}
+try(log("not a number"))
+print("errors can't stop me")
 ```
 
 
@@ -232,13 +233,16 @@ With the `try` function you can handle errors to continue the execution (by igno
 With `tryCatch` you can handle errors as you want:
 ```{r}
 an.error.occured <- FALSE
-tryCatch( { res <- log("not a number"); print(res) }
+tryCatch( { result <- log("not a number"); print(res) }
           , error = function(e) {an.error.occured <<- TRUE})
 print(an.error.occured)
 ```
 
-Note: If you use an error handler function the error is not shown anymore and the execution continues after
-the `tryCatch` statement.
+</br>
+If you use an error handler function
+
+ * the error is not shown anymore and
+ * the execution continues after the `tryCatch` statement.
 
 
 
@@ -247,7 +251,7 @@ the `tryCatch` statement.
 ... not only errors. Just use the condition name as parameter to handle conditions of this type, e. g. a warning:
 
 ```{r}
-tryCatch( { res <- log(-1); print("Done") }
+tryCatch( { result <- log(-1); print(result) }
           , warning = function(w) { print("Hey, a warning") })
 ```
 
@@ -265,10 +269,10 @@ print(last.message$message)
 
 
 
-## User defined conditions
+## Advanced topic: User defined conditions
 
 You can even define your own user-defined condition classes, but
-there is no built in function to generate a new object of class condition.
+there is no built in function to generate a new object of class `condition`.
 So do it yourself:*
 
 ```{r}
@@ -298,13 +302,13 @@ See the next slides for the answer!
 
 # The drawbacks of `tryCatch`
 
-## 1. Handling a condition stops the execution 1/2
+## Handling a condition stops the execution 1/2
 
-If you catch a warning (or another non-error condition) with `tryCatch` then R does
+If you catch a condition (even only a warning or message) with `tryCatch` then R
 
-1. abort the execution of code that throwed the condition,
-1. executes the handler function and
-1. then continues the execution with the next command after the `tryCatch` command:
+1. executes the condition handler function
+1. aborts the execution of the code that throwed the condition
+1. continues the execution with **the next command after the `tryCatch` command**:
 
 ```{r, echo=FALSE}
 # dummy code to avoid a "missing function" error in the next code junk
@@ -315,27 +319,27 @@ write.to.log <- function(msg) { invisible() }
 ```{r}
 f <- function() {
   warning("deprecated function called")
-  print("Hello old world")
+  print("Hello world")
 }
 tryCatch(f(), warning = function(w) { write.to.log(w) })
 print("Done")
 ```
 
-Observe: *Hello old world* is never printed! But normally you just want to log warnings without stopping the execution of the function `f()`.
+**Observe:** *Hello world* is never printed! But normally you just want to log warnings without stopping the execution of the function `f()`.
 It does **not** resume with the next command after the code that raised (throwed) the condition!
 
 
 
-## 1. Handling a condition stops the execution 2/2
+## Handling a condition stops the execution 2/2
 
-Compare: Calling the function without `tryCatch` does not stop the
+**Compare:** Calling the function **without** `tryCatch` does not stop the
 execution of the function `f()`:
 
 ```{r}
-{ # Execute as one block of code to show the output at the end only
+{ # required to execute the code as one block to summarize the output in this slide
   f <- function() {
     warning("deprecated function called")
-    print("Hello old world")
+    print("Hello world")
   }
   f()
   print("Done")
@@ -344,13 +348,13 @@ execution of the function `f()`:
 
 
 
-## 2. Handling errors unrolls the stack trace 1/2
+## Handling errors unrolls the stack trace 1/2
 
 If you do **not catch an error** you can get the complete function call stack using `traceback`
 which helps you to identify the code that throwed the error:
 
 ```{r, error = TRUE, eval = FALSE}
-options(error=function() traceback(2)) # hack from: http://stackoverflow.com/a/13119318/4468078
+options(error=function() traceback(2)) # http://stackoverflow.com/a/13119318/4468078
 f <- function() {
   log("not a number")
   print("Hello world")
@@ -370,9 +374,9 @@ Error in log("not a number") :
 
 
 
-## 2. Handling errors unrolls the stack trace 2/2
+## Handling errors unrolls the stack trace 2/2
 
-But if you handle the error:
+But if you handle the error, the call stack is truncated:
 
 ```{r, error = TRUE, eval = FALSE}
 f <- function() {
@@ -393,17 +397,20 @@ tryCatch(f(), error = function(e) { traceback() })
 1: source("f.R")
 ```
 
-The call stack ends basically with the `tryCatch` call but does **not** show you the code in `f()`
-where the error was thrown.
+The call stack ends basically with the `tryCatch` call but **does not show you the code line in `f()`
+where the error was thrown**.
 
 
 ## Summary: The drawbacks of `tryCatch`
 
-**How can you find out the exact reason for the error**
+**You can not find out the exact reason for errors**
 
-- without a full stack trace?
-- if logging of warnings and messages is not possible without canceling
-  the execution and resuming after `tryCatch`?
+1. because the full stack trace is truncated
+
+1. handling of warnings and messages (e. g. to log them) cancels
+   the execution to call the handler function and continues the execution after `tryCatch`
+   
+
 
 
 
@@ -424,12 +431,12 @@ For more details on interactive debugging see `?debug`.
 Interactive debugging is very difficult in case of
 
 - errors that are not (easily) reproducible.
-- long running code that produces an error at the end
-- batch jobs running on a server
+- errors that occur only after a long run time
+- batch jobs running on a server (you have no interactive GUI then!)
 
 
 
-# Workaround 2: Use `withCallingHandlers` with `tryCatch`
+# Workaround 2: Combine `withCallingHandlers` with `tryCatch`
 
 
 ## How `withCallingHandlers` works
@@ -442,17 +449,16 @@ Interactive debugging is very difficult in case of
 ```{r}
 f <- function() {
   warning("deprecated function called")
-  print("Hello old world")
+  print("Hello world")
 }
 withCallingHandlers(f(), warning = function(w) { write.to.log(sys.calls()) })
-print("Done")
 ```
 
-`sys.calls` within `withCallingHandlers` returns the full call stack.
+**`sys.calls`** within `withCallingHandlers` returns the full **call stack**.
 
 
 
-## `withCallingHandlers` with restarts
+## `withCallingHandlers` supports restarts
 
 Restarts are used to recover from conditions using a predefined behaviour:
 
@@ -468,41 +474,45 @@ print("Done")
 
 `invokeRestart("muffleWarning")` has a simple recovery strategy: "Suppress the warning".
 
-It removes the warning (so it cannot be handled anymore at higher function call levels)
+TODO: Mention other restarts...
+
+It removes the warning (so it does not "bubble up" to higher function call levels)
 and resumes the execution.
 
 
 
 ## Differences between `withCallingHandlers` and `tryCatch`
 
-- `withCallingHandlers` remembers the call stack
-- `tryCatch` unwinds the stack to the `tryCatch` call
-- `withCallingHandlers` resumes execution in case of non-error conditions
-- `tryCatch` breaks and continues after the `tryCatch` command
+|                       | tryCatch               | withCallingHandlers         |
+|-----------------------|----------------------- |-----------------------------|
+| **Program execution** | **breaks** and continues with the first expression after the `tryCatch` function call | **resumes** the execution at the code line that throwed the condition |
+| **Call stack** (`traceback` and `sys.calls`) | **unwinds the call stack** up to the `tryCatch` function call |  **keeps the full call stack** down to the code line that throwed the condition |
+| **Condition handling** | **Conditions are consumed** by the handler function that catches the condition | **Conditions are not consumed** by handler functions and bubble up |
 
-TODO: A table would be clearer!
+**Note: `tryCatch` is different from Java's `try-catch` statement: It unwinds the call stack (in Java you get the
+full call stack with the `printStackTrace` method)!**
 
 
 
 ## Combine `withCallingHandlers` with `tryCatch`
 
-Requirements for better condition handling in R:
+The requirements for better condition handling in R
 
-- Log all conditions on console or in file
+- log all conditions on the console or in a file
 - resume execution after warnings and messages
-- and continue after the handling function in case of an error
+- continue the execution after the handler function in case of an error
 
-Solution:
+can be satisfied by
 
-- handle all conditions in `withCallingHandlers` to log them with the full stack trace
-- to resume after a non-error condition invoke a restart in `withCallingHandlers`
-- handle only errors in `tryCatch` to recover from the error and continue execution after `tryCatch`
+- handling all conditions in `withCallingHandlers` to log them with the full stack trace
+- invoking a restart in `withCallingHandlers` to resume after a non-error condition
+- handle errors in `tryCatch` to recover from the error and continue execution after the `tryCatch` function call
 
 
 
-## Implementation template
+## Code snippet for better error handling
 
-An improved "error handler" in R looks similar to this code pattern:
+An improved "error handler" in R looks similar to this code snippet:
 ```{r, results='hold'}
 f <- function() {
   warning("deprecated function called")
@@ -518,20 +528,65 @@ tryCatch(withCallingHandlers(f(), error = function(e)   { write.to.log(sys.calls
 print("Done")
 ```
 
-**This is how `tryCatchLog` works internally!**
+**This is how the `tryCatchLog` package works internally!**
 
 
 
-## Usability?
+## How about usability?
 
-**Do you really want to use that much code in your R script at every place
+**Do you really want to use that much boilerplate code in your R scripts at every place
 where you have to catch errors and conditions?**
 
-See the the next slides on how the package `tryCatchLog` could make your life easier!
+If not: See the the next slides to learn how the package `tryCatchLog` could make your life much easier!
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
 # Solution: The `tryCatchLog` package
+
+## Installation
+
+To install the package `tryCatchLog` from the source code use:
+
+```{r, eval = FALSE}
+# install.packages("devtools")
+library(devtools)
+install_github("aryoda/tryCatchLog")
+```
+
+For more details see the Project site at: https://github.com/aryoda/tryCatchLog
+
+
+
+## Overview
+
+The `tryCatchLog` package improves the standard R's `try` and `tryCatch` functions by
+offering extended functions:
+
+| Intention             | Standard R    | tryCatchLog package |
+|-----------------------|---------------|---------------------|
+| Return an error object in case of errors | `try()` | `tryLog()` |
+| Handle conditions via "event" handler functions | `tryCatch()` | `tryCatchLog()` |
+
+**Improvements:**
+
+1. Configurable logging
+2. Full call stack
+3. Resume after warnings and messages
+4. Support for post-mortem analysis after errors via dump files
+
+
 
 ## `tryLog` with an error
 
@@ -597,23 +652,27 @@ tryLog(f(-1))
 
 
 
-## `tryCatchLog` to recover from errors
+## `tryCatchLog` to recover from errors with logging
 
-Use `tryCatchLog` to also establish an error handler:
+Use `tryCatchLog` to establish an error handler:
 
 ```{r, eval = FALSE}
 library(tryCatchLog)
 
-tryCatchLog(read.csv("server.log"),
-            error = function(e) { send.email("admin@home.de", e)
-})
+send.email <- function(reveiver, body) { }  # dummy function (does nothing)
+
+tryCatchLog(log("not a number"),
+            error = function(e) { send.email("admin@home", e)
+            })
 ```
 
+The console shows the log output then and the execution continues:
+
 ```{r eval = FALSE}
-## ERROR [2016-12-06 22:13:05] cannot open the connection
-## Compact call stack:
-##   1 test.R#3: tryCatchLog(read.csv("server.log"), error = function(e) {
-##   2 tryCatchLog.R#259: tryCatch(withCallingHandlers(expr, error = function(e) {
+ERROR [2017-01-22 22:04:56] non-numeric argument to mathematical function
+Compact call stack:
+  1 tryCatchLog_error_example.R#5: tryCatchLog(log("not a number"), error = function(e) {
+  2 tryCatchLog.R#273: tryCatch(withCallingHandlers(expr, error = function(e) {
 ...
 ```
 
@@ -627,8 +686,11 @@ To log to a file instead of the console or to change the logging level you call 
 
 ```{r eval = FALSE}
   library(futile.logger)
+
   flog.appender(appender.file("app.log"))
+  
   flog.threshold(ERROR)    # TRACE, DEBUG, INFO, WARN, ERROR, FATAL
+  
   try(log(-1))             # the warning will not be logged!
 ```
 
@@ -642,9 +704,9 @@ https://cran.r-project.org/package=futile.logger
 
 
 
-## From interactive debugging...
+## Limitations of interactive debugging
 
-Interactive debugging is very difficult in case of
+Interactive debugging using an IDE or the console is very difficult in case of
 
 - errors that are not (easily) reproducible.
 - long running code that produces an error at the end
@@ -652,10 +714,14 @@ Interactive debugging is very difficult in case of
 
 
 
-## ... to post-mortem analysis
+## Solution: Post-mortem analysis
 
-**Post-mortem analysis**: In case of an error create a dump file with all variables of the global environment (workspace)
-and all environments of each called function (via `dump.frames`) so that you can
+**Post-mortem analysis** means to create a dump file in case of an error that contains
+
+- all variables of the global environment (workspace) and
+- all environments ("scopes") of each called function (via `dump.frames`)
+
+so that you can
 
 - load the dump file into a new R session after the script has stopped the execution ("post-mortem") and
 - examine the call stack and variable values ("analysis")
@@ -664,7 +730,7 @@ to find out the reason for the error.
 
 
 
-## Create a dump file with `tryCatchLog`
+## Enable post-mortem analysis
 
 `tryCatchLog` supports post-mortem analysis by creating dump files in case of errors:
 
@@ -691,7 +757,7 @@ Compact call stack:
 
 
 
-## Start post-mortem debugging
+## Start a post-mortem analysis
 
 Open a new R session and start the post-mortem analysis of the error:
 
@@ -722,9 +788,8 @@ Function call 13 shows: The error was thrown in the file `test.R` at line #3: `l
 
 ## Post-mortem debugging: Examine an environment
 
-Switch into the environment of the function call 12 in which the error occured.
-
-The environment of function call 12 contains all variables visible within the function:
+Switch into the environment of the function call 12 in which the error occured
+and examine variables visible within this function:
 
 ```{r eval = FALSE}
 Enter an environment number, or 0 to exit  
@@ -741,29 +806,32 @@ Browse[1]> typeof(value)
 Browse[1]> 
 ```
 
-By looking at the value and data type of the variable `value` it is easy to identify the reason for error.
+By looking at the (function argument) variable `value`
+it is easy to identify the reason for the error: **A value with the wrong data type was passed!**
 
-*You can exit the debugger with "Q" (or "f" followed by "0") now.*
+*You can exit the debugger with "Q" (or "f" followed by "0") now and fix the bug.*
 
 
 
 ## Post-mortem debugging: Limitations
 
-R dump files (created with `save.image`) do **not** contain the packages
-loaded when the dump file was created and a dump loaded into memory does
-**not** use exactly the same search path to find objects during post-mortem debugging.
+R dump files (created with `save.image`) do **not** contain the loaded packages
+when the dump file was created.
 
-This means:
+Therefor a dump loaded into memory later does **not** load these packages automatically.
 
-- the program state is not exactly reproducible if objects are stored within a package namespace
-- you cannot step through your source code in a reproducible way after loading the image
-  if your source code calls functions of non-default packages
+**This means the program state as of the error is not exactly reproducible:**
+
+- Objects that were stored within a package namespace are not available
+- The search path to find objects during post-mortem analysis is different
+- You cannot step through your source code after loading the image
+  if your source code calls functions of non-default packages. You have to load these packages manually
 
 For more details see: https://github.com/aryoda/tryCatchLog/issues/12
 
 
 
-# `tryCatchLog` functions reference
+# `tryCatchLog` Function Reference
 
 
 
@@ -775,8 +843,8 @@ tryCatchLog(expr,
   error = getOption("error", default = stop),
   finally = NULL,
   dump.errors.to.file = getOption("tryCatchLog.dump.errors.to.file", FALSE),
-  silent.warnings = getOption("tryCatchLog.silent.warnings", FALSE),
-  silent.messages = getOption("tryCatchLog.silent.messages", FALSE))
+  silent.warnings     = getOption("tryCatchLog.silent.warnings", FALSE),
+  silent.messages     = getOption("tryCatchLog.silent.messages", FALSE))
 ```
 
 This function evaluates the expression in `expr` and calls the error handler function `error` in case of an error condition.
@@ -785,7 +853,7 @@ Conditions (errors, warnings and messages) are logged with the function call sta
 Warnings and messages can be "silenced" (only logged but not propagated to the caller) using the `silent.*` parameters.
 
 The default values of some parameters can be set globally via options to avoid repeating the same
-parameter values and to support an easy reconfiguration for all calls.
+parameter values and to support an easy reconfiguration for all calls without changing the code.
 
 
 
@@ -795,8 +863,8 @@ Function signature:
 ```{r eval = FALSE}
 tryLog(expr,
   dump.errors.to.file = getOption("tryCatchLog.dump.errors.to.file", FALSE),
-  silent.warnings = getOption("tryCatchLog.silent.warnings", FALSE),
-  silent.messages = getOption("tryCatchLog.silent.messages", FALSE))
+  silent.warnings     = getOption("tryCatchLog.silent.warnings", FALSE),
+  silent.messages     = getOption("tryCatchLog.silent.messages", FALSE))
 ```
 
 This function is a short version of `tryCatchLog()`
@@ -804,18 +872,22 @@ that traps any errors that occur during the evaluation of the expression `expr`
 without stopping the execution of the script (similar to `try` in R).
 Errors, warnings and messages are logged.
 
-In contrast to `tryCatchLog()` it returns but does not stop in case of an error
-and therefor does not have the error and finally parameters to pass in custom handler functions.
+In contrast to `tryCatchLog()` it returns an object of the class "try-error"
+in case of an error and continues after the `tryLog` expression.
+Therefor `tryLog` does not support the `error` and `finally` parameters
+to pass in custom handler functions.
 
 The default values of some parameters can be set globally via options to avoid repeating the same
-parameter values and to support an easy reconfiguration for all calls.
+parameter values and to support an easy reconfiguration for all calls
+without changing the code.
 
 
 
 ## Change global options of `tryCatchLog`
 
-You can change the default values of many options globally by initalizing them once in your code
-to reduce lengthy function calls later, e. g.
+The default values of many options can be changed globally by configuring them once 
+to reduce lengthy function calls later and support easy reconfiguration for all calls
+without changing the code:
 
 ```{r results = "hide"}
 # Initialize your own default values globally for tryLog and tryCatchLog
@@ -868,7 +940,11 @@ tryLog(test(), silent.warnings = TRUE, silent.messages = TRUE, dump.errors.to.fi
   -> in einem eigenen Kapitel?!
 
 
-
+Add FAQ section with
+- Why does tryCatchLog() not support other condition handler besides error (e. g. warning or message)?
+  -> only required for logging! If you want to convert warnings into errors use the standard R method (option)
+  
+  
 
 ## TODO SUMMARY with advantages - Prüfen, ob das alles erwähnt wird...
 
@@ -885,4 +961,14 @@ Vorteile von tryCatchLog
 + compact call stack (if available) 
 + Top-Feature: post-mortem analysis!
 + also logs conditions from used packages
+
+
+
+# Appendix
+
+## References 
+
+Download of these slides: https://github.com/aryoda/R_trainings
+
+Project home of the `tryCatchLog` package: https://github.com/aryoda/tryCatchLog
 

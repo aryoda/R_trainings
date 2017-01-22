@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="generator" content="pandoc">
   <meta name="author" content="Jürgen Altfeld" />
-  <title>Error handling in R with tryCatchLog: Catch, log and post-mortem analysis</title>
+  <title>Error handling in R with tryCatchLog:Catch, log and post-mortem analysis</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
@@ -96,17 +96,388 @@ code > span.in { color: #8f5902; font-weight: bold; font-style: italic; } /* Inf
 
     <style type="text/css">code{white-space: pre;}</style>
 
-    <!-- Printing and PDF exports -->
-    <script>
-      var link = document.createElement( 'link' );
-      link.rel = 'stylesheet';
-      link.type = 'text/css';
-      link.href = window.location.search.match( /print-pdf/gi ) ? '/home/juergen/R/x86_64-pc-linux-gnu-library/3.3/revealjs/reveal.js-3.3.0/css/print/pdf.css' : '/home/juergen/R/x86_64-pc-linux-gnu-library/3.3/revealjs/reveal.js-3.3.0/css/print/paper.css';
-      document.getElementsByTagName( 'head' )[0].appendChild( link );
-    </script>
-    <!--[if lt IE 9]>
-    <script src="/home/juergen/R/x86_64-pc-linux-gnu-library/3.3/revealjs/reveal.js-3.3.0/lib/js/html5shiv.js"></script>
-    <![endif]-->
+
+<!-- Printing and PDF exports -->
+<script id="paper-css" type="application/dynamic-css">
+
+/* Default Print Stylesheet Template
+   by Rob Glazebrook of CSSnewbie.com
+   Last Updated: June 4, 2008
+
+   Feel free (nay, compelled) to edit, append, and
+   manipulate this file as you see fit. */
+
+
+@media print {
+
+	/* SECTION 1: Set default width, margin, float, and
+	   background. This prevents elements from extending
+	   beyond the edge of the printed page, and prevents
+	   unnecessary background images from printing */
+	html {
+		background: #fff;
+		width: auto;
+		height: auto;
+		overflow: visible;
+	}
+	body {
+		background: #fff;
+		font-size: 20pt;
+		width: auto;
+		height: auto;
+		border: 0;
+		margin: 0 5%;
+		padding: 0;
+		overflow: visible;
+		float: none !important;
+	}
+
+	/* SECTION 2: Remove any elements not needed in print.
+	   This would include navigation, ads, sidebars, etc. */
+	.nestedarrow,
+	.controls,
+	.fork-reveal,
+	.share-reveal,
+	.state-background,
+	.reveal .progress,
+	.reveal .backgrounds {
+		display: none !important;
+	}
+
+	/* SECTION 3: Set body font face, size, and color.
+	   Consider using a serif font for readability. */
+	body, p, td, li, div {
+		font-size: 20pt!important;
+		font-family: Georgia, "Times New Roman", Times, serif !important;
+		color: #000;
+	}
+
+	/* SECTION 4: Set heading font face, sizes, and color.
+	   Differentiate your headings from your body text.
+	   Perhaps use a large sans-serif for distinction. */
+	h1,h2,h3,h4,h5,h6 {
+		color: #000!important;
+		height: auto;
+		line-height: normal;
+		font-family: Georgia, "Times New Roman", Times, serif !important;
+		text-shadow: 0 0 0 #000 !important;
+		text-align: left;
+		letter-spacing: normal;
+	}
+	/* Need to reduce the size of the fonts for printing */
+	h1 { font-size: 28pt !important;  }
+	h2 { font-size: 24pt !important; }
+	h3 { font-size: 22pt !important; }
+	h4 { font-size: 22pt !important; font-variant: small-caps; }
+	h5 { font-size: 21pt !important; }
+	h6 { font-size: 20pt !important; font-style: italic; }
+
+	/* SECTION 5: Make hyperlinks more usable.
+	   Ensure links are underlined, and consider appending
+	   the URL to the end of the link for usability. */
+	a:link,
+	a:visited {
+		color: #000 !important;
+		font-weight: bold;
+		text-decoration: underline;
+	}
+	/*
+	.reveal a:link:after,
+	.reveal a:visited:after {
+		content: " (" attr(href) ") ";
+		color: #222 !important;
+		font-size: 90%;
+	}
+	*/
+
+
+	/* SECTION 6: more reveal.js specific additions by @skypanther */
+	ul, ol, div, p {
+		visibility: visible;
+		position: static;
+		width: auto;
+		height: auto;
+		display: block;
+		overflow: visible;
+		margin: 0;
+		text-align: left !important;
+	}
+	.reveal pre,
+	.reveal table {
+		margin-left: 0;
+		margin-right: 0;
+	}
+	.reveal pre code {
+		padding: 20px;
+		border: 1px solid #ddd;
+	}
+	.reveal blockquote {
+		margin: 20px 0;
+	}
+	.reveal .slides {
+		position: static !important;
+		width: auto !important;
+		height: auto !important;
+
+		left: 0 !important;
+		top: 0 !important;
+		margin-left: 0 !important;
+		margin-top: 0 !important;
+		padding: 0 !important;
+		zoom: 1 !important;
+
+		overflow: visible !important;
+		display: block !important;
+
+		text-align: left !important;
+		-webkit-perspective: none;
+		   -moz-perspective: none;
+		    -ms-perspective: none;
+		        perspective: none;
+
+		-webkit-perspective-origin: 50% 50%;
+		   -moz-perspective-origin: 50% 50%;
+		    -ms-perspective-origin: 50% 50%;
+		        perspective-origin: 50% 50%;
+	}
+	.reveal .slides section {
+		visibility: visible !important;
+		position: static !important;
+		width: auto !important;
+		height: auto !important;
+		display: block !important;
+		overflow: visible !important;
+
+		left: 0 !important;
+		top: 0 !important;
+		margin-left: 0 !important;
+		margin-top: 0 !important;
+		padding: 60px 20px !important;
+		z-index: auto !important;
+
+		opacity: 1 !important;
+
+		page-break-after: always !important;
+
+		-webkit-transform-style: flat !important;
+		   -moz-transform-style: flat !important;
+		    -ms-transform-style: flat !important;
+		        transform-style: flat !important;
+
+		-webkit-transform: none !important;
+		   -moz-transform: none !important;
+		    -ms-transform: none !important;
+		        transform: none !important;
+
+		-webkit-transition: none !important;
+		   -moz-transition: none !important;
+		    -ms-transition: none !important;
+		        transition: none !important;
+	}
+	.reveal .slides section.stack {
+		padding: 0 !important;
+	}
+	.reveal section:last-of-type {
+		page-break-after: avoid !important;
+	}
+	.reveal section .fragment {
+		opacity: 1 !important;
+		visibility: visible !important;
+
+		-webkit-transform: none !important;
+		   -moz-transform: none !important;
+		    -ms-transform: none !important;
+		        transform: none !important;
+	}
+	.reveal section img {
+		display: block;
+		margin: 15px 0px;
+		background: rgba(255,255,255,1);
+		border: 1px solid #666;
+		box-shadow: none;
+	}
+
+	.reveal section small {
+		font-size: 0.8em;
+	}
+
+}  
+</script>
+
+
+<script id="pdf-css" type="application/dynamic-css">
+    
+/**
+ * This stylesheet is used to print reveal.js
+ * presentations to PDF.
+ *
+ * https://github.com/hakimel/reveal.js#pdf-export
+ */
+
+* {
+	-webkit-print-color-adjust: exact;
+}
+
+body {
+	margin: 0 auto !important;
+	border: 0;
+	padding: 0;
+	float: none !important;
+	overflow: visible;
+}
+
+html {
+	width: 100%;
+	height: 100%;
+	overflow: visible;
+}
+
+/* Remove any elements not needed in print. */
+.nestedarrow,
+.reveal .controls,
+.reveal .progress,
+.reveal .playback,
+.reveal.overview,
+.fork-reveal,
+.share-reveal,
+.state-background {
+	display: none !important;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	text-shadow: 0 0 0 #000 !important;
+}
+
+.reveal pre code {
+	overflow: hidden !important;
+	font-family: Courier, 'Courier New', monospace !important;
+}
+
+ul, ol, div, p {
+	visibility: visible;
+	position: static;
+	width: auto;
+	height: auto;
+	display: block;
+	overflow: visible;
+	margin: auto;
+}
+.reveal {
+	width: auto !important;
+	height: auto !important;
+	overflow: hidden !important;
+}
+.reveal .slides {
+	position: static;
+	width: 100%;
+	height: auto;
+
+	left: auto;
+	top: auto;
+	margin: 0 !important;
+	padding: 0 !important;
+
+	overflow: visible;
+	display: block;
+
+	-webkit-perspective: none;
+	   -moz-perspective: none;
+	    -ms-perspective: none;
+	        perspective: none;
+
+	-webkit-perspective-origin: 50% 50%; /* there isn't a none/auto value but 50-50 is the default */
+	   -moz-perspective-origin: 50% 50%;
+	    -ms-perspective-origin: 50% 50%;
+	        perspective-origin: 50% 50%;
+}
+
+.reveal .slides section {
+	page-break-after: always !important;
+
+	visibility: visible !important;
+	position: relative !important;
+	display: block !important;
+	position: relative !important;
+
+	margin: 0 !important;
+	padding: 0 !important;
+	box-sizing: border-box !important;
+	min-height: 1px;
+
+	opacity: 1 !important;
+
+	-webkit-transform-style: flat !important;
+	   -moz-transform-style: flat !important;
+	    -ms-transform-style: flat !important;
+	        transform-style: flat !important;
+
+	-webkit-transform: none !important;
+	   -moz-transform: none !important;
+	    -ms-transform: none !important;
+	        transform: none !important;
+}
+
+.reveal section.stack {
+	margin: 0 !important;
+	padding: 0 !important;
+	page-break-after: avoid !important;
+	height: auto !important;
+	min-height: auto !important;
+}
+
+.reveal img {
+	box-shadow: none;
+}
+
+.reveal .roll {
+	overflow: visible;
+	line-height: 1em;
+}
+
+/* Slide backgrounds are placed inside of their slide when exporting to PDF */
+.reveal section .slide-background {
+	display: block !important;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	z-index: -1;
+}
+
+/* All elements should be above the slide-background */
+.reveal section>* {
+	position: relative;
+	z-index: 1;
+}
+
+/* Display slide speaker notes when 'showNotes' is enabled */
+.reveal .speaker-notes-pdf {
+	display: block;
+	width: 100%;
+	max-height: none;
+	left: auto;
+	top: auto;
+	z-index: 100;
+}
+
+/* Display slide numbers when 'slideNumber' is enabled */
+.reveal .slide-number-pdf {
+	display: block;
+	position: absolute;
+	font-size: 14px;
+}
+
+</script>
+
+
+<script>
+var style = document.createElement( 'style' );
+style.type = 'text/css';
+var style_script_id = window.location.search.match( /print-pdf/gi ) ? 'pdf-css' : 'paper-css';
+var style_script = document.getElementById(style_script_id).text;
+style.innerHTML = style_script;
+document.getElementsByTagName('head')[0].appendChild(style);
+</script>
 
 </head>
 <body>
@@ -114,9 +485,9 @@ code > span.in { color: #8f5902; font-weight: bold; font-style: italic; } /* Inf
     <div class="slides">
 
 <section>
-    <h1 class="title">Error handling in R with tryCatchLog:<br>Catch, log and post-mortem analysis</h1>
+    <h1 class="title">Error handling in R with tryCatchLog:</br>Catch, log and post-mortem analysis</h1>
     <h2 class="author">Jürgen Altfeld</h2>
-    <h3 class="date">Dec. 2016<br><br><br>
+    <h3 class="date">Dec. 2016</br></br></br>
 <p style="font-size:0.5em">
 These slides have been created with RMarkdown and the package <a href="https://github.com/rstudio/revealjs">revealjs</a>
 <p></h3>
@@ -125,7 +496,7 @@ These slides have been created with RMarkdown and the package <a href="https://g
 <section id="license-gpl-3" class="slide level2">
 <h1>License (GPL-3)</h1>
 <p><img src="data:image/png;base64,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" alt="gplv3 logo" /></p>
-<p>Copyright (C) 2016 Juergen Altfeld (<a href="mailto:R@altfeld-im.de">R@altfeld-im.de</a>)</p>
+<p>Copyright (C) 2016 Jürgen Altfeld (<a href="mailto:R@altfeld-im.de">R@altfeld-im.de</a>)</p>
 <p>This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.</p>
 <p>This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.</p>
 <p>You should have received <a href="LICENSE">a copy of the GNU General Public License</a> along with this program. If not, see <a href="http://www.gnu.org/licenses/" class="uri">http://www.gnu.org/licenses/</a>.</p>
@@ -206,31 +577,30 @@ These slides have been created with RMarkdown and the package <a href="https://g
 </section>
 <section><section id="introduction-into-conditions-in-standard-r" class="titleslide slide level1"><h1>Introduction into conditions in standard R</h1></section><section id="what-is-a-condition" class="slide level2">
 <h1>What is a condition?</h1>
-<p>The execution of an R script can be interrupted to signal special states (<em>conditions</em>).</p>
-<p>Examples:</p>
+<p>The execution of an R script can be interrupted to signal special states (<em>conditions</em>) like:</p>
 <ul>
 <li>errors</li>
 <li>warnings</li>
-<li>messages</li>
-<li>user interrupts (by hitting CTRL + C/BRK or ESC)</li>
+<li>info messages</li>
+<li>user requested interrupts (by hitting CTRL + C/BRK or ESC)</li>
 </ul>
 </section><section id="condition-examples" class="slide level2">
 <h1>Condition examples</h1>
 <p>An error condition:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">log</span>(<span class="st">&quot;text&quot;</span>)   <span class="co"># throws an error</span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">log</span>(<span class="st">&quot;text&quot;</span>)   <span class="co"># calculating the logarithm of a text throws an error</span></code></pre></div>
 <pre><code>## Error in log(&quot;text&quot;): non-numeric argument to mathematical function</code></pre>
 <p>A warning condition:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">log</span>(-<span class="dv">1</span>)                <span class="co"># throws a warning</span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">log</span>(-<span class="dv">1</span>)                <span class="co"># logarithm of a negative number throws a warning</span></code></pre></div>
 <pre><code>## Warning in log(-1): NaNs produced</code></pre>
 <pre><code>## [1] NaN</code></pre>
 </section></section>
 <section><section id="throw-your-own-conditions" class="titleslide slide level1"><h1>Throw your own conditions</h1></section><section id="error" class="slide level2">
 <h1>Error</h1>
-<p>Based on a “condition” (expression) to recognize an invalid state:</p>
+<p>Throw an error “condition” if you recognize an invalid program state:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">if (<span class="dv">1</span> !=<span class="st"> </span><span class="dv">2</span>)
   <span class="kw">stop</span>(<span class="st">&quot;something is wrong&quot;</span>)</code></pre></div>
 <pre><code>## Error in eval(expr, envir, enclos): something is wrong</code></pre>
-<p>Or shorter (but without a message text):</p>
+<p></br> Or shorter (but without a way to specify an error text):</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">stopifnot</span>(<span class="dv">1</span> ==<span class="st"> </span><span class="dv">2</span>)</code></pre></div>
 <pre><code>## Error: 1 == 2 is not TRUE</code></pre>
 </section><section id="warning" class="slide level2">
@@ -246,33 +616,38 @@ These slides have been created with RMarkdown and the package <a href="https://g
 <h1>Unhandled errors stop R</h1>
 <p>By default R will stop the execution if an error occurs:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">options</span>(<span class="dt">error =</span> <span class="ot">NULL</span>)  <span class="co"># switch to default behaviour of R</span>
-{
+
+test &lt;-<span class="st"> </span>function() {
   <span class="kw">log</span>(<span class="st">&quot;not a number&quot;</span>)
   <span class="kw">print</span>(<span class="st">&quot;R does stop due to an error and never executes this line&quot;</span>)
-}</code></pre></div>
+}
+
+<span class="kw">test</span>()     <span class="co"># throws an error</span></code></pre></div>
 <pre><code>## Error in log(&quot;not a number&quot;): non-numeric argument to mathematical function</code></pre>
 <p>Note that the output does <strong>not</strong> show the <code>print</code> result since the execution stops in case of an error.</p>
 </section><section id="use-try-to-ignore-errors" class="slide level2">
 <h1>Use <code>try</code> to ignore errors</h1>
 <p>With the <code>try</code> function you can handle errors to continue the execution (by ignoring the error):</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">{
-  <span class="kw">try</span>(<span class="kw">log</span>(<span class="st">&quot;not a number&quot;</span>))
-  <span class="kw">print</span>(<span class="st">&quot;errors can't stop me&quot;</span>)
-}</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">try</span>(<span class="kw">log</span>(<span class="st">&quot;not a number&quot;</span>))
+<span class="kw">print</span>(<span class="st">&quot;errors can't stop me&quot;</span>)</code></pre></div>
 <pre><code>## [1] &quot;errors can't stop me&quot;</code></pre>
 </section><section id="use-trycatch-to-handle-errors" class="slide level2">
 <h1>Use <code>tryCatch</code> to handle errors</h1>
 <p>With <code>tryCatch</code> you can handle errors as you want:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">an.error.occured &lt;-<span class="st"> </span><span class="ot">FALSE</span>
-<span class="kw">tryCatch</span>( { res &lt;-<span class="st"> </span><span class="kw">log</span>(<span class="st">&quot;not a number&quot;</span>); <span class="kw">print</span>(res) }
+<span class="kw">tryCatch</span>( { result &lt;-<span class="st"> </span><span class="kw">log</span>(<span class="st">&quot;not a number&quot;</span>); <span class="kw">print</span>(res) }
           , <span class="dt">error =</span> function(e) {an.error.occured &lt;&lt;-<span class="st"> </span><span class="ot">TRUE</span>})
 <span class="kw">print</span>(an.error.occured)</code></pre></div>
 <pre><code>## [1] TRUE</code></pre>
-<p>Note: If you use an error handler function the error is not shown anymore and the execution continues after the <code>tryCatch</code> statement.</p>
+<p></br> If you use an error handler function</p>
+<ul>
+<li>the error is not shown anymore and</li>
+<li>the execution continues after the <code>tryCatch</code> statement.</li>
+</ul>
 </section><section id="trycatch-can-handle-all-conditions-12" class="slide level2">
 <h1><code>tryCatch</code> can handle all conditions 1/2</h1>
 <p>… not only errors. Just use the condition name as parameter to handle conditions of this type, e. g. a warning:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">tryCatch</span>( { res &lt;-<span class="st"> </span><span class="kw">log</span>(-<span class="dv">1</span>); <span class="kw">print</span>(<span class="st">&quot;Done&quot;</span>) }
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">tryCatch</span>( { result &lt;-<span class="st"> </span><span class="kw">log</span>(-<span class="dv">1</span>); <span class="kw">print</span>(result) }
           , <span class="dt">warning =</span> function(w) { <span class="kw">print</span>(<span class="st">&quot;Hey, a warning&quot;</span>) })</code></pre></div>
 <pre><code>## [1] &quot;Hey, a warning&quot;</code></pre>
 </section><section id="trycatch-can-handle-all-conditions-12-1" class="slide level2">
@@ -283,9 +658,9 @@ These slides have been created with RMarkdown and the package <a href="https://g
           , <span class="dt">message =</span> function(m) { last.message &lt;&lt;-<span class="st"> </span>m })
 <span class="kw">print</span>(last.message$message)</code></pre></div>
 <pre><code>## [1] &quot;please handle me\n&quot;</code></pre>
-</section><section id="user-defined-conditions" class="slide level2">
-<h1>User defined conditions</h1>
-<p>You can even define your own user-defined condition classes, but there is no built in function to generate a new object of class condition. So do it yourself:*</p>
+</section><section id="advanced-topic-user-defined-conditions" class="slide level2">
+<h1>Advanced topic: User defined conditions</h1>
+<p>You can even define your own user-defined condition classes, but there is no built in function to generate a new object of class <code>condition</code>. So do it yourself:*</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">condition &lt;-<span class="st"> </span>function(subclass, message, <span class="dt">call =</span> <span class="kw">sys.call</span>(-<span class="dv">1</span>), ...) {
   <span class="kw">structure</span>( <span class="dt">class =</span> <span class="kw">c</span>(subclass, <span class="st">&quot;condition&quot;</span>),
              <span class="kw">list</span>(<span class="dt">message =</span> message, <span class="dt">call =</span> call, ...))
@@ -303,39 +678,39 @@ These slides have been created with RMarkdown and the package <a href="https://g
 <p>See the next slides for the answer!</p>
 </section></section>
 <section><section id="the-drawbacks-of-trycatch" class="titleslide slide level1"><h1>The drawbacks of <code>tryCatch</code></h1></section><section id="handling-a-condition-stops-the-execution-12" class="slide level2">
-<h1>1. Handling a condition stops the execution 1/2</h1>
-<p>If you catch a warning (or another non-error condition) with <code>tryCatch</code> then R does</p>
+<h1>Handling a condition stops the execution 1/2</h1>
+<p>If you catch a condition (even only a warning or message) with <code>tryCatch</code> then R</p>
 <ol type="1">
-<li>abort the execution of code that throwed the condition,</li>
-<li>executes the handler function and</li>
-<li>then continues the execution with the next command after the <code>tryCatch</code> command:</li>
+<li>executes the condition handler function</li>
+<li>aborts the execution of the code that throwed the condition</li>
+<li>continues the execution with <strong>the next command after the <code>tryCatch</code> command</strong>:</li>
 </ol>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">f &lt;-<span class="st"> </span>function() {
   <span class="kw">warning</span>(<span class="st">&quot;deprecated function called&quot;</span>)
-  <span class="kw">print</span>(<span class="st">&quot;Hello old world&quot;</span>)
+  <span class="kw">print</span>(<span class="st">&quot;Hello world&quot;</span>)
 }
 <span class="kw">tryCatch</span>(<span class="kw">f</span>(), <span class="dt">warning =</span> function(w) { <span class="kw">write.to.log</span>(w) })
 <span class="kw">print</span>(<span class="st">&quot;Done&quot;</span>)</code></pre></div>
 <pre><code>## [1] &quot;Done&quot;</code></pre>
-<p>Observe: <em>Hello old world</em> is never printed! But normally you just want to log warnings without stopping the execution of the function <code>f()</code>. It does <strong>not</strong> resume with the next command after the code that raised (throwed) the condition!</p>
+<p><strong>Observe:</strong> <em>Hello world</em> is never printed! But normally you just want to log warnings without stopping the execution of the function <code>f()</code>. It does <strong>not</strong> resume with the next command after the code that raised (throwed) the condition!</p>
 </section><section id="handling-a-condition-stops-the-execution-22" class="slide level2">
-<h1>1. Handling a condition stops the execution 2/2</h1>
-<p>Compare: Calling the function without <code>tryCatch</code> does not stop the execution of the function <code>f()</code>:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">{ <span class="co"># Execute as one block of code to show the output at the end only</span>
+<h1>Handling a condition stops the execution 2/2</h1>
+<p><strong>Compare:</strong> Calling the function <strong>without</strong> <code>tryCatch</code> does not stop the execution of the function <code>f()</code>:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">{ <span class="co"># required to execute the code as one block to summarize the output in this slide</span>
   f &lt;-<span class="st"> </span>function() {
     <span class="kw">warning</span>(<span class="st">&quot;deprecated function called&quot;</span>)
-    <span class="kw">print</span>(<span class="st">&quot;Hello old world&quot;</span>)
+    <span class="kw">print</span>(<span class="st">&quot;Hello world&quot;</span>)
   }
   <span class="kw">f</span>()
   <span class="kw">print</span>(<span class="st">&quot;Done&quot;</span>)
 }</code></pre></div>
 <pre><code>## Warning in f(): deprecated function called</code></pre>
-<pre><code>## [1] &quot;Hello old world&quot;
+<pre><code>## [1] &quot;Hello world&quot;
 ## [1] &quot;Done&quot;</code></pre>
 </section><section id="handling-errors-unrolls-the-stack-trace-12" class="slide level2">
-<h1>2. Handling errors unrolls the stack trace 1/2</h1>
+<h1>Handling errors unrolls the stack trace 1/2</h1>
 <p>If you do <strong>not catch an error</strong> you can get the complete function call stack using <code>traceback</code> which helps you to identify the code that throwed the error:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">options</span>(<span class="dt">error=</span>function() <span class="kw">traceback</span>(<span class="dv">2</span>)) <span class="co"># hack from: http://stackoverflow.com/a/13119318/4468078</span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">options</span>(<span class="dt">error=</span>function() <span class="kw">traceback</span>(<span class="dv">2</span>)) <span class="co"># http://stackoverflow.com/a/13119318/4468078</span>
 f &lt;-<span class="st"> </span>function() {
   <span class="kw">log</span>(<span class="st">&quot;not a number&quot;</span>)
   <span class="kw">print</span>(<span class="st">&quot;Hello world&quot;</span>)
@@ -349,8 +724,8 @@ f &lt;-<span class="st"> </span>function() {
 ...
 <span class="dv">1</span>:<span class="st"> </span><span class="kw">source</span>(<span class="st">&quot;f.R&quot;</span>)</code></pre></div>
 </section><section id="handling-errors-unrolls-the-stack-trace-22" class="slide level2">
-<h1>2. Handling errors unrolls the stack trace 2/2</h1>
-<p>But if you handle the error:</p>
+<h1>Handling errors unrolls the stack trace 2/2</h1>
+<p>But if you handle the error, the call stack is truncated:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">f &lt;-<span class="st"> </span>function() {
   <span class="kw">log</span>(<span class="st">&quot;not a number&quot;</span>)
   <span class="kw">print</span>(<span class="st">&quot;Hello world&quot;</span>)
@@ -364,14 +739,14 @@ f &lt;-<span class="st"> </span>function() {
    }) at f.R<span class="co">#5</span>
 ...
 <span class="dv">1</span>:<span class="st"> </span><span class="kw">source</span>(<span class="st">&quot;f.R&quot;</span>)</code></pre></div>
-<p>The call stack ends basically with the <code>tryCatch</code> call but does <strong>not</strong> show you the code in <code>f()</code> where the error was thrown.</p>
+<p>The call stack ends basically with the <code>tryCatch</code> call but <strong>does not show you the code line in <code>f()</code> where the error was thrown</strong>.</p>
 </section><section id="summary-the-drawbacks-of-trycatch" class="slide level2">
 <h1>Summary: The drawbacks of <code>tryCatch</code></h1>
-<p><strong>How can you find out the exact reason for the error</strong></p>
-<ul>
-<li>without a full stack trace?</li>
-<li>if logging of warnings and messages is not possible without canceling the execution and resuming after <code>tryCatch</code>?</li>
-</ul>
+<p><strong>You can not find out the exact reason for errors</strong></p>
+<ol type="1">
+<li><p>because the full stack trace is truncated</p></li>
+<li><p>handling of warnings and messages (e. g. to log them) cancels the execution to call the handler function and continues the execution after <code>tryCatch</code></p></li>
+</ol>
 </section></section>
 <section><section id="workaround-1-interactive-debugging" class="titleslide slide level1"><h1>Workaround 1: Interactive debugging</h1></section><section id="interactive-debugging" class="slide level2">
 <h1>Interactive debugging</h1>
@@ -383,11 +758,11 @@ f &lt;-<span class="st"> </span>function() {
 <p>Interactive debugging is very difficult in case of</p>
 <ul>
 <li>errors that are not (easily) reproducible.</li>
-<li>long running code that produces an error at the end</li>
-<li>batch jobs running on a server</li>
+<li>errors that occur only after a long run time</li>
+<li>batch jobs running on a server (you have no interactive GUI then!)</li>
 </ul>
 </section></section>
-<section><section id="workaround-2-use-withcallinghandlers-with-trycatch" class="titleslide slide level1"><h1>Workaround 2: Use <code>withCallingHandlers</code> with <code>tryCatch</code></h1></section><section id="how-withcallinghandlers-works" class="slide level2">
+<section><section id="workaround-2-combine-withcallinghandlers-with-trycatch" class="titleslide slide level1"><h1>Workaround 2: Combine <code>withCallingHandlers</code> with <code>tryCatch</code></h1></section><section id="how-withcallinghandlers-works" class="slide level2">
 <h1>How <code>withCallingHandlers</code> works</h1>
 <p><code>withCallingHandlers</code> works similar to <code>tryCatch</code> but</p>
 <ol type="1">
@@ -396,16 +771,14 @@ f &lt;-<span class="st"> </span>function() {
 </ol>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">f &lt;-<span class="st"> </span>function() {
   <span class="kw">warning</span>(<span class="st">&quot;deprecated function called&quot;</span>)
-  <span class="kw">print</span>(<span class="st">&quot;Hello old world&quot;</span>)
+  <span class="kw">print</span>(<span class="st">&quot;Hello world&quot;</span>)
 }
 <span class="kw">withCallingHandlers</span>(<span class="kw">f</span>(), <span class="dt">warning =</span> function(w) { <span class="kw">write.to.log</span>(<span class="kw">sys.calls</span>()) })</code></pre></div>
 <pre><code>## Warning in f(): deprecated function called</code></pre>
-<pre><code>## [1] &quot;Hello old world&quot;</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">print</span>(<span class="st">&quot;Done&quot;</span>)</code></pre></div>
-<pre><code>## [1] &quot;Done&quot;</code></pre>
-<p><code>sys.calls</code> within <code>withCallingHandlers</code> returns the full call stack.</p>
-</section><section id="withcallinghandlers-with-restarts" class="slide level2">
-<h1><code>withCallingHandlers</code> with restarts</h1>
+<pre><code>## [1] &quot;Hello world&quot;</code></pre>
+<p><strong><code>sys.calls</code></strong> within <code>withCallingHandlers</code> returns the full <strong>call stack</strong>.</p>
+</section><section id="withcallinghandlers-supports-restarts" class="slide level2">
+<h1><code>withCallingHandlers</code> supports restarts</h1>
 <p>Restarts are used to recover from conditions using a predefined behaviour:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">f &lt;-<span class="st"> </span>function() {
   <span class="kw">warning</span>(<span class="st">&quot;deprecated function called&quot;</span>)
@@ -417,33 +790,59 @@ f &lt;-<span class="st"> </span>function() {
 <pre><code>## [1] &quot;Hello old world&quot;
 ## [1] &quot;Done&quot;</code></pre>
 <p><code>invokeRestart(&quot;muffleWarning&quot;)</code> has a simple recovery strategy: “Suppress the warning”.</p>
-<p>It removes the warning (so it cannot be handled anymore at higher function call levels) and resumes the execution.</p>
+<p>TODO: Mention other restarts…</p>
+<p>It removes the warning (so it does not “bubble up” to higher function call levels) and resumes the execution.</p>
 </section><section id="differences-between-withcallinghandlers-and-trycatch" class="slide level2">
 <h1>Differences between <code>withCallingHandlers</code> and <code>tryCatch</code></h1>
-<ul>
-<li><code>withCallingHandlers</code> remembers the call stack</li>
-<li><code>tryCatch</code> unwinds the stack to the <code>tryCatch</code> call</li>
-<li><code>withCallingHandlers</code> resumes execution in case of non-error conditions</li>
-<li><code>tryCatch</code> breaks and continues after the <code>tryCatch</code> command</li>
-</ul>
-<p>TODO: A table would be clearer!</p>
+<table style="width:108%;">
+<colgroup>
+<col style="width: 33%"></col>
+<col style="width: 33%"></col>
+<col style="width: 41%"></col>
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: left;">tryCatch</th>
+<th style="text-align: left;">withCallingHandlers</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><strong>Program execution</strong></td>
+<td style="text-align: left;"><strong>breaks</strong> and continues with the first expression after the <code>tryCatch</code> function call</td>
+<td style="text-align: left;"><strong>resumes</strong> the execution at the code line that throwed the condition</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>Call stack</strong> (<code>traceback</code> and <code>sys.calls</code>)</td>
+<td style="text-align: left;"><strong>unwinds the call stack</strong> up to the <code>tryCatch</code> function call</td>
+<td style="text-align: left;"><strong>keeps the full call stack</strong> down to the code line that throwed the condition</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>Condition handling</strong></td>
+<td style="text-align: left;"><strong>Conditions are consumed</strong> by the handler function that catches the condition</td>
+<td style="text-align: left;"><strong>Conditions are not consumed</strong> by handler functions and bubble up</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Note: <code>tryCatch</code> is different from Java’s <code>try-catch</code> statement: It unwinds the call stack (in Java you get the full call stack with the <code>printStackTrace</code> method)!</strong></p>
 </section><section id="combine-withcallinghandlers-with-trycatch" class="slide level2">
 <h1>Combine <code>withCallingHandlers</code> with <code>tryCatch</code></h1>
-<p>Requirements for better condition handling in R:</p>
+<p>The requirements for better condition handling in R</p>
 <ul>
-<li>Log all conditions on console or in file</li>
+<li>log all conditions on the console or in a file</li>
 <li>resume execution after warnings and messages</li>
-<li>and continue after the handling function in case of an error</li>
+<li>continue the execution after the handler function in case of an error</li>
 </ul>
-<p>Solution:</p>
+<p>can be satisfied by</p>
 <ul>
-<li>handle all conditions in <code>withCallingHandlers</code> to log them with the full stack trace</li>
-<li>to resume after a non-error condition invoke a restart in <code>withCallingHandlers</code></li>
-<li>handle only errors in <code>tryCatch</code> to recover from the error and continue execution after <code>tryCatch</code></li>
+<li>handling all conditions in <code>withCallingHandlers</code> to log them with the full stack trace</li>
+<li>invoking a restart in <code>withCallingHandlers</code> to resume after a non-error condition</li>
+<li>handle errors in <code>tryCatch</code> to recover from the error and continue execution after the <code>tryCatch</code> function call</li>
 </ul>
-</section><section id="implementation-template" class="slide level2">
-<h1>Implementation template</h1>
-<p>An improved “error handler” in R looks similar to this code pattern:</p>
+</section><section id="code-snippet-for-better-error-handling" class="slide level2">
+<h1>Code snippet for better error handling</h1>
+<p>An improved “error handler” in R looks similar to this code snippet:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">f &lt;-<span class="st"> </span>function() {
   <span class="kw">warning</span>(<span class="st">&quot;deprecated function called&quot;</span>)
   <span class="kw">print</span>(<span class="st">&quot;A warning cannot stop me&quot;</span>)
@@ -459,13 +858,56 @@ f &lt;-<span class="st"> </span>function() {
 <pre><code>## [1] &quot;A warning cannot stop me&quot;
 ## [1] &quot;recovered from error&quot;
 ## [1] &quot;Done&quot;</code></pre>
-<p><strong>This is how <code>tryCatchLog</code> works internally!</strong></p>
-</section><section id="usability" class="slide level2">
-<h1>Usability?</h1>
-<p><strong>Do you really want to use that much code in your R script at every place where you have to catch errors and conditions?</strong></p>
-<p>See the the next slides on how the package <code>tryCatchLog</code> could make your life easier!</p>
+<p><strong>This is how the <code>tryCatchLog</code> package works internally!</strong></p>
+</section><section id="how-about-usability" class="slide level2">
+<h1>How about usability?</h1>
+<p><strong>Do you really want to use that much boilerplate code in your R scripts at every place where you have to catch errors and conditions?</strong></p>
+<p>If not: See the the next slides to learn how the package <code>tryCatchLog</code> could make your life much easier!</p>
 </section></section>
-<section><section id="solution-the-trycatchlog-package" class="titleslide slide level1"><h1>Solution: The <code>tryCatchLog</code> package</h1></section><section id="trylog-with-an-error" class="slide level2">
+<section><section id="solution-the-trycatchlog-package" class="titleslide slide level1"><h1>Solution: The <code>tryCatchLog</code> package</h1></section><section id="installation" class="slide level2">
+<h1>Installation</h1>
+<p>To install the package <code>tryCatchLog</code> from the source code use:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># install.packages(&quot;devtools&quot;)</span>
+<span class="kw">library</span>(devtools)
+<span class="kw">install_github</span>(<span class="st">&quot;aryoda/tryCatchLog&quot;</span>)</code></pre></div>
+<p>For more details see the Project site at: <a href="https://github.com/aryoda/tryCatchLog" class="uri">https://github.com/aryoda/tryCatchLog</a></p>
+</section><section id="overview" class="slide level2">
+<h1>Overview</h1>
+<p>The <code>tryCatchLog</code> package improves the standard R’s <code>try</code> and <code>tryCatch</code> functions by offering extended functions:</p>
+<table style="width:86%;">
+<colgroup>
+<col style="width: 33%"></col>
+<col style="width: 22%"></col>
+<col style="width: 30%"></col>
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Intention</th>
+<th style="text-align: left;">Standard R</th>
+<th style="text-align: left;">tryCatchLog package</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Return an error object in case of errors</td>
+<td style="text-align: left;"><code>try()</code></td>
+<td style="text-align: left;"><code>tryLog()</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Handle conditions via “event” handler functions</td>
+<td style="text-align: left;"><code>tryCatch()</code></td>
+<td style="text-align: left;"><code>tryCatchLog()</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Improvements:</strong></p>
+<ol type="1">
+<li>Configurable logging</li>
+<li>Full call stack</li>
+<li>Resume after warnings and messages</li>
+<li>Support for post-mortem analysis after errors via dump files</li>
+</ol>
+</section><section id="trylog-with-an-error" class="slide level2">
 <h1><code>tryLog</code> with an error</h1>
 <p>Errors are logged but the execution continues after the <code>tryLog</code> call:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tryCatchLog)
@@ -504,48 +946,59 @@ f &lt;-<span class="st"> </span>function(value) {
 ##   4 test.R#4: .signalSimpleWarning(&quot;NaNs produced&quot;, quote(log(value)))
 ...
 ## [1] &quot;end&quot;</code></pre></div>
-</section><section id="trycatchlog-to-recover-from-errors" class="slide level2">
-<h1><code>tryCatchLog</code> to recover from errors</h1>
-<p>Use <code>tryCatchLog</code> to also establish an error handler:</p>
+</section><section id="trycatchlog-to-recover-from-errors-with-logging" class="slide level2">
+<h1><code>tryCatchLog</code> to recover from errors with logging</h1>
+<p>Use <code>tryCatchLog</code> to establish an error handler:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tryCatchLog)
 
-<span class="kw">tryCatchLog</span>(<span class="kw">read.csv</span>(<span class="st">&quot;server.log&quot;</span>),
-            <span class="dt">error =</span> function(e) { <span class="kw">send.email</span>(<span class="st">&quot;admin@home.de&quot;</span>, e)
-})</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## ERROR [2016-12-06 22:13:05] cannot open the connection
-## Compact call stack:
-##   1 test.R#3: tryCatchLog(read.csv(&quot;server.log&quot;), error = function(e) {
-##   2 tryCatchLog.R#259: tryCatch(withCallingHandlers(expr, error = function(e) {
+send.email &lt;-<span class="st"> </span>function(reveiver, body) { }  <span class="co"># dummy function (does nothing)</span>
+
+<span class="kw">tryCatchLog</span>(<span class="kw">log</span>(<span class="st">&quot;not a number&quot;</span>),
+            <span class="dt">error =</span> function(e) { <span class="kw">send.email</span>(<span class="st">&quot;admin@home&quot;</span>, e)
+            })</code></pre></div>
+<p>The console shows the log output then and the execution continues:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ERROR [<span class="dv">2017-01-22</span> <span class="dv">22</span>:<span class="dv">04</span>:<span class="dv">56</span>] non-numeric argument to mathematical function
+Compact call stack:
+<span class="st">  </span><span class="dv">1</span> tryCatchLog_error_example.R<span class="co">#5: tryCatchLog(log(&quot;not a number&quot;), error = function(e) {</span>
+  <span class="dv">2</span> tryCatchLog.R<span class="co">#273: tryCatch(withCallingHandlers(expr, error = function(e) {</span>
 ...</code></pre></div>
 <p><strong>Note:</strong> <code>send.email</code> is a dummy function for demonstration purposes!</p>
 </section><section id="change-logging-behaviour" class="slide level2">
 <h1>Change logging behaviour</h1>
 <p>To log to a file instead of the console or to change the logging level you call the usual <code>futile.logger</code> functions:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">  <span class="kw">library</span>(futile.logger)
+
   <span class="kw">flog.appender</span>(<span class="kw">appender.file</span>(<span class="st">&quot;app.log&quot;</span>))
+  
   <span class="kw">flog.threshold</span>(ERROR)    <span class="co"># TRACE, DEBUG, INFO, WARN, ERROR, FATAL</span>
+  
   <span class="kw">try</span>(<span class="kw">log</span>(-<span class="dv">1</span>))             <span class="co"># the warning will not be logged!</span></code></pre></div>
 <p>For more details about <code>futile.logger</code> see:</p>
 <p><a href="https://cran.r-project.org/package=futile.logger" class="uri">https://cran.r-project.org/package=futile.logger</a></p>
 </section></section>
-<section><section id="post-mortem-analysis" class="titleslide slide level1"><h1>Post-mortem analysis</h1></section><section id="from-interactive-debugging" class="slide level2">
-<h1>From interactive debugging…</h1>
-<p>Interactive debugging is very difficult in case of</p>
+<section><section id="post-mortem-analysis" class="titleslide slide level1"><h1>Post-mortem analysis</h1></section><section id="limitations-of-interactive-debugging-1" class="slide level2">
+<h1>Limitations of interactive debugging</h1>
+<p>Interactive debugging using an IDE or the console is very difficult in case of</p>
 <ul>
 <li>errors that are not (easily) reproducible.</li>
 <li>long running code that produces an error at the end</li>
 <li>batch jobs running on a server</li>
 </ul>
-</section><section id="to-post-mortem-analysis" class="slide level2">
-<h1>… to post-mortem analysis</h1>
-<p><strong>Post-mortem analysis</strong>: In case of an error create a dump file with all variables of the global environment (workspace) and all environments of each called function (via <code>dump.frames</code>) so that you can</p>
+</section><section id="solution-post-mortem-analysis" class="slide level2">
+<h1>Solution: Post-mortem analysis</h1>
+<p><strong>Post-mortem analysis</strong> means to create a dump file in case of an error that contains</p>
+<ul>
+<li>all variables of the global environment (workspace) and</li>
+<li>all environments (“scopes”) of each called function (via <code>dump.frames</code>)</li>
+</ul>
+<p>so that you can</p>
 <ul>
 <li>load the dump file into a new R session after the script has stopped the execution (“post-mortem”) and</li>
 <li>examine the call stack and variable values (“analysis”)</li>
 </ul>
 <p>to find out the reason for the error.</p>
-</section><section id="create-a-dump-file-with-trycatchlog" class="slide level2">
-<h1>Create a dump file with <code>tryCatchLog</code></h1>
+</section><section id="enable-post-mortem-analysis" class="slide level2">
+<h1>Enable post-mortem analysis</h1>
 <p><code>tryCatchLog</code> supports post-mortem analysis by creating dump files in case of errors:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tryCatchLog)
 f &lt;-<span class="st"> </span>function(value) {
@@ -562,8 +1015,8 @@ Compact call stack:
   <span class="dv">4</span> tryCatchLog.R<span class="co">#262: tryCatch(withCallingHandlers(expr, error = function(e) {</span>
   <span class="dv">5</span> test.R<span class="co">#3: .handleSimpleError(function (e)</span>
   ...</code></pre></div>
-</section><section id="start-post-mortem-debugging" class="slide level2">
-<h1>Start post-mortem debugging</h1>
+</section><section id="start-a-post-mortem-analysis" class="slide level2">
+<h1>Start a post-mortem analysis</h1>
 <p>Open a new R session and start the post-mortem analysis of the error:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">load</span>(<span class="st">&quot;dump_20161212_222952.rda&quot;</span>)    <span class="co"># load the dump into the global environment</span>
 <span class="kw">debugger</span>(last.dump)                 <span class="co"># start the post-mortem analysis</span></code></pre></div>
@@ -583,8 +1036,7 @@ Selection:<span class="st"> </span><span class="er">&lt;</span>Cursor is waiting
 <p>Function call 13 shows: The error was thrown in the file <code>test.R</code> at line #3: <code>log(value)</code></p>
 </section><section id="post-mortem-debugging-examine-an-environment" class="slide level2">
 <h1>Post-mortem debugging: Examine an environment</h1>
-<p>Switch into the environment of the function call 12 in which the error occured.</p>
-<p>The environment of function call 12 contains all variables visible within the function:</p>
+<p>Switch into the environment of the function call 12 in which the error occured and examine variables visible within this function:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Enter an environment number, or <span class="dv">0</span> to exit  
 Selection:<span class="st"> </span><span class="dv">12</span>
 Browsing in the environment with call:
@@ -597,42 +1049,44 @@ Browse[<span class="dv">1</span>]&gt;<span class="st"> </span>value
 Browse[<span class="dv">1</span>]&gt;<span class="st"> </span><span class="kw">typeof</span>(value)
 [<span class="dv">1</span>] <span class="st">&quot;character&quot;</span>
 Browse[<span class="dv">1</span>]&gt;<span class="st"> </span></code></pre></div>
-<p>By looking at the value and data type of the variable <code>value</code> it is easy to identify the reason for error.</p>
-<p><em>You can exit the debugger with “Q” (or “f” followed by “0”) now.</em></p>
+<p>By looking at the (function argument) variable <code>value</code> it is easy to identify the reason for the error: <strong>A value with the wrong data type was passed!</strong></p>
+<p><em>You can exit the debugger with “Q” (or “f” followed by “0”) now and fix the bug.</em></p>
 </section><section id="post-mortem-debugging-limitations" class="slide level2">
 <h1>Post-mortem debugging: Limitations</h1>
-<p>R dump files (created with <code>save.image</code>) do <strong>not</strong> contain the packages loaded when the dump file was created and a dump loaded into memory does <strong>not</strong> use exactly the same search path to find objects during post-mortem debugging.</p>
-<p>This means:</p>
+<p>R dump files (created with <code>save.image</code>) do <strong>not</strong> contain the loaded packages when the dump file was created.</p>
+<p>Therefor a dump loaded into memory later does <strong>not</strong> load these packages automatically.</p>
+<p><strong>This means the program state as of the error is not exactly reproducible:</strong></p>
 <ul>
-<li>the program state is not exactly reproducible if objects are stored within a package namespace</li>
-<li>you cannot step through your source code in a reproducible way after loading the image if your source code calls functions of non-default packages</li>
+<li>Objects that were stored within a package namespace are not available</li>
+<li>The search path to find objects during post-mortem analysis is different</li>
+<li>You cannot step through your source code after loading the image if your source code calls functions of non-default packages. You have to load these packages manually</li>
 </ul>
 <p>For more details see: <a href="https://github.com/aryoda/tryCatchLog/issues/12" class="uri">https://github.com/aryoda/tryCatchLog/issues/12</a></p>
 </section></section>
-<section><section id="trycatchlog-functions-reference" class="titleslide slide level1"><h1><code>tryCatchLog</code> functions reference</h1></section><section id="trycatchlog" class="slide level2">
+<section><section id="trycatchlog-function-reference" class="titleslide slide level1"><h1><code>tryCatchLog</code> Function Reference</h1></section><section id="trycatchlog" class="slide level2">
 <h1>tryCatchLog()</h1>
 <p>Function signature:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">tryCatchLog</span>(expr,
   <span class="dt">error =</span> <span class="kw">getOption</span>(<span class="st">&quot;error&quot;</span>, <span class="dt">default =</span> stop),
   <span class="dt">finally =</span> <span class="ot">NULL</span>,
   <span class="dt">dump.errors.to.file =</span> <span class="kw">getOption</span>(<span class="st">&quot;tryCatchLog.dump.errors.to.file&quot;</span>, <span class="ot">FALSE</span>),
-  <span class="dt">silent.warnings =</span> <span class="kw">getOption</span>(<span class="st">&quot;tryCatchLog.silent.warnings&quot;</span>, <span class="ot">FALSE</span>),
-  <span class="dt">silent.messages =</span> <span class="kw">getOption</span>(<span class="st">&quot;tryCatchLog.silent.messages&quot;</span>, <span class="ot">FALSE</span>))</code></pre></div>
+  <span class="dt">silent.warnings     =</span> <span class="kw">getOption</span>(<span class="st">&quot;tryCatchLog.silent.warnings&quot;</span>, <span class="ot">FALSE</span>),
+  <span class="dt">silent.messages     =</span> <span class="kw">getOption</span>(<span class="st">&quot;tryCatchLog.silent.messages&quot;</span>, <span class="ot">FALSE</span>))</code></pre></div>
 <p>This function evaluates the expression in <code>expr</code> and calls the error handler function <code>error</code> in case of an error condition. The function in <code>finally</code> is then always evaluated at the end. Conditions (errors, warnings and messages) are logged with the function call stack (including file names and line numbers). Warnings and messages can be “silenced” (only logged but not propagated to the caller) using the <code>silent.*</code> parameters.</p>
-<p>The default values of some parameters can be set globally via options to avoid repeating the same parameter values and to support an easy reconfiguration for all calls.</p>
+<p>The default values of some parameters can be set globally via options to avoid repeating the same parameter values and to support an easy reconfiguration for all calls without changing the code.</p>
 </section><section id="trylog" class="slide level2">
 <h1>tryLog()</h1>
 <p>Function signature:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">tryLog</span>(expr,
   <span class="dt">dump.errors.to.file =</span> <span class="kw">getOption</span>(<span class="st">&quot;tryCatchLog.dump.errors.to.file&quot;</span>, <span class="ot">FALSE</span>),
-  <span class="dt">silent.warnings =</span> <span class="kw">getOption</span>(<span class="st">&quot;tryCatchLog.silent.warnings&quot;</span>, <span class="ot">FALSE</span>),
-  <span class="dt">silent.messages =</span> <span class="kw">getOption</span>(<span class="st">&quot;tryCatchLog.silent.messages&quot;</span>, <span class="ot">FALSE</span>))</code></pre></div>
+  <span class="dt">silent.warnings     =</span> <span class="kw">getOption</span>(<span class="st">&quot;tryCatchLog.silent.warnings&quot;</span>, <span class="ot">FALSE</span>),
+  <span class="dt">silent.messages     =</span> <span class="kw">getOption</span>(<span class="st">&quot;tryCatchLog.silent.messages&quot;</span>, <span class="ot">FALSE</span>))</code></pre></div>
 <p>This function is a short version of <code>tryCatchLog()</code> that traps any errors that occur during the evaluation of the expression <code>expr</code> without stopping the execution of the script (similar to <code>try</code> in R). Errors, warnings and messages are logged.</p>
-<p>In contrast to <code>tryCatchLog()</code> it returns but does not stop in case of an error and therefor does not have the error and finally parameters to pass in custom handler functions.</p>
-<p>The default values of some parameters can be set globally via options to avoid repeating the same parameter values and to support an easy reconfiguration for all calls.</p>
+<p>In contrast to <code>tryCatchLog()</code> it returns an object of the class “try-error” in case of an error and continues after the <code>tryLog</code> expression. Therefor <code>tryLog</code> does not support the <code>error</code> and <code>finally</code> parameters to pass in custom handler functions.</p>
+<p>The default values of some parameters can be set globally via options to avoid repeating the same parameter values and to support an easy reconfiguration for all calls without changing the code.</p>
 </section><section id="change-global-options-of-trycatchlog" class="slide level2">
 <h1>Change global options of <code>tryCatchLog</code></h1>
-<p>You can change the default values of many options globally by initalizing them once in your code to reduce lengthy function calls later, e. g.</p>
+<p>The default values of many options can be changed globally by configuring them once to reduce lengthy function calls later and support easy reconfiguration for all calls without changing the code:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Initialize your own default values globally for tryLog and tryCatchLog</span>
 <span class="kw">options</span>(<span class="dt">tryCatchLog.dump.errors.to.file =</span> <span class="ot">FALSE</span>)
 <span class="kw">options</span>(<span class="dt">tryCatchLog.silent.messages     =</span> <span class="ot">TRUE</span>)
@@ -664,8 +1118,9 @@ test &lt;-<span class="st"> </span>function() {
 <li>Options zum gezielten temporären Aktivieren von Funktionalitäten</li>
 <li>Anwendungs-Szenarios interaktiv (mit/ohne Benutzer-Interaktion) vs. Batch -&gt; in einem eigenen Kapitel?!</li>
 </ul>
-</section><section id="todo-summary-advantages---prufen-ob-das-alles-erwahnt-wird" class="slide level2">
-<h1>TODO Summary + advantages - Prüfen, ob das alles erwähnt wird…</h1>
+<p>Add FAQ section with - Why does tryCatchLog() not support other condition handler besides error (e. g. warning or message)? -&gt; only required for logging! If you want to convert warnings into errors use the standard R method (option)</p>
+</section><section id="todo-summary-with-advantages---prufen-ob-das-alles-erwahnt-wird" class="slide level2">
+<h1>TODO SUMMARY with advantages - Prüfen, ob das alles erwähnt wird…</h1>
 <p>Probleme bei klassischen error handling:</p>
 <ul>
 <li>sys.calls enthält keine source code references -&gt; limitedLabels</li>
@@ -679,6 +1134,11 @@ test &lt;-<span class="st"> </span>function() {
 <li>Top-Feature: post-mortem analysis!</li>
 <li>also logs conditions from used packages</li>
 </ul>
+</section></section>
+<section><section id="appendix" class="titleslide slide level1"><h1>Appendix</h1></section><section id="references" class="slide level2">
+<h1>References</h1>
+<p>Download of these slides: <a href="https://github.com/aryoda/R_trainings" class="uri">https://github.com/aryoda/R_trainings</a></p>
+<p>Project home of the <code>tryCatchLog</code> package: <a href="https://github.com/aryoda/tryCatchLog" class="uri">https://github.com/aryoda/tryCatchLog</a></p>
 </section></section>
     </div>
   </div>
@@ -701,6 +1161,7 @@ test &lt;-<span class="st"> </span>function() {
         transition: 'default', // none/fade/slide/convex/concave/zoom
         // Transition style for full page slide backgrounds
         backgroundTransition: 'default', // none/fade/slide/convex/concave/zoom
+
 
         // Optional reveal.js plugins
         dependencies: [

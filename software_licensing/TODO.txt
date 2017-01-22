@@ -1,0 +1,20 @@
+Idea:
+
+Make slides to explain and compare the different software licenses
+and a decisions matrix to compare them
+
+
+      
+Helpful links giving input:
+
+Many different licenses
+https://www.gnu.org/licenses/license-list.en.html
+
+CC0 ist best option for "public domain"
+https://www.gnu.org/licenses/license-list.en.html#CC0
+
+Public Domain license (but FSF recommends CC0 instead)
+http://unlicense.org/
+
+AGPLv3
+http://www.gnu.org/licenses/agpl-3.0.html
