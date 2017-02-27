@@ -14,6 +14,13 @@
     </script>
 
 
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+Angepasster CSS-Style für RevealJS:
+https://github.com/sebastian-c/r-group-code/blob/master/2015-12-02/regex_presentation-rpubs.html
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!11111
+
+
+
 !!! Liste der Styles im Theme:
 https://github.com/hakimel/reveal.js/blob/master/css/theme/template/theme.scss
 

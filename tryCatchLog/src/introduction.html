@@ -794,34 +794,34 @@ f &lt;-<span class="st"> </span>function() {
 <p>It removes the warning (so it does not “bubble up” to higher function call levels) and resumes the execution.</p>
 </section><section id="differences-between-withcallinghandlers-and-trycatch" class="slide level2">
 <h1>Differences between <code>withCallingHandlers</code> and <code>tryCatch</code></h1>
-<table style="width:108%;">
+<table>
 <colgroup>
-<col style="width: 33%"></col>
-<col style="width: 33%"></col>
-<col style="width: 41%"></col>
+<col style="width: 30%"></col>
+<col style="width: 30%"></col>
+<col style="width: 38%"></col>
 </colgroup>
 <thead>
 <tr class="header">
-<th style="text-align: left;"></th>
-<th style="text-align: left;">tryCatch</th>
-<th style="text-align: left;">withCallingHandlers</th>
+<th></th>
+<th>tryCatch</th>
+<th>withCallingHandlers</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: left;"><strong>Program execution</strong></td>
-<td style="text-align: left;"><strong>breaks</strong> and continues with the first expression after the <code>tryCatch</code> function call</td>
-<td style="text-align: left;"><strong>resumes</strong> the execution at the code line that throwed the condition</td>
+<td><strong>Program execution</strong></td>
+<td><strong>breaks</strong> and continues with the first expression after the <code>tryCatch</code> function call</td>
+<td><strong>resumes</strong> the execution at the code line that throwed the condition</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;"><strong>Call stack</strong> (<code>traceback</code> and <code>sys.calls</code>)</td>
-<td style="text-align: left;"><strong>unwinds the call stack</strong> up to the <code>tryCatch</code> function call</td>
-<td style="text-align: left;"><strong>keeps the full call stack</strong> down to the code line that throwed the condition</td>
+<td><strong>Call stack</strong> (<code>traceback</code> and <code>sys.calls</code>)</td>
+<td><strong>unwinds the call stack</strong> up to the <code>tryCatch</code> function call</td>
+<td><strong>keeps the full call stack</strong> down to the code line that throwed the condition</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;"><strong>Condition handling</strong></td>
-<td style="text-align: left;"><strong>Conditions are consumed</strong> by the handler function that catches the condition</td>
-<td style="text-align: left;"><strong>Conditions are not consumed</strong> by handler functions and bubble up</td>
+<td><strong>Condition handling</strong></td>
+<td><strong>Conditions are consumed</strong> by the handler function that catches the condition</td>
+<td><strong>Conditions are not consumed</strong> by handler functions and bubble up</td>
 </tr>
 </tbody>
 </table>
@@ -874,29 +874,24 @@ f &lt;-<span class="st"> </span>function() {
 </section><section id="overview" class="slide level2">
 <h1>Overview</h1>
 <p>The <code>tryCatchLog</code> package improves the standard R’s <code>try</code> and <code>tryCatch</code> functions by offering extended functions:</p>
-<table style="width:86%;">
-<colgroup>
-<col style="width: 33%"></col>
-<col style="width: 22%"></col>
-<col style="width: 30%"></col>
-</colgroup>
+<table>
 <thead>
 <tr class="header">
-<th style="text-align: left;">Intention</th>
-<th style="text-align: left;">Standard R</th>
-<th style="text-align: left;">tryCatchLog package</th>
+<th>Intention</th>
+<th>Standard R</th>
+<th>tryCatchLog package</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: left;">Return an error object in case of errors</td>
-<td style="text-align: left;"><code>try()</code></td>
-<td style="text-align: left;"><code>tryLog()</code></td>
+<td>Return an error object in case of errors</td>
+<td><code>try()</code></td>
+<td><code>tryLog()</code></td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">Handle conditions via “event” handler functions</td>
-<td style="text-align: left;"><code>tryCatch()</code></td>
-<td style="text-align: left;"><code>tryCatchLog()</code></td>
+<td>Handle conditions via “event” handler functions</td>
+<td><code>tryCatch()</code></td>
+<td><code>tryCatchLog()</code></td>
 </tr>
 </tbody>
 </table>
@@ -1119,7 +1114,16 @@ test &lt;-<span class="st"> </span>function() {
 <li>Anwendungs-Szenarios interaktiv (mit/ohne Benutzer-Interaktion) vs. Batch -&gt; in einem eigenen Kapitel?!</li>
 </ul>
 <p>Add FAQ section with - Why does tryCatchLog() not support other condition handler besides error (e. g. warning or message)? -&gt; only required for logging! If you want to convert warnings into errors use the standard R method (option)</p>
-</section><section id="todo-summary-with-advantages---prufen-ob-das-alles-erwahnt-wird" class="slide level2">
+<p>Section with best practices (Usage Guide?): - Fehler protokolieren darf grundsätzlich nur der, der die Exceptions schlussendlich fängt und behandelt. - An sich sollte man sich deshalb eigentlich angewöhnen, auf der obersten Codeebene ein “catch (Throable t) { handleUncatchedThrowable(t) }” oder sowas stehen zu haben, das zu nem geordneten Programmabbruch führt. - find the right point for a graceful recovery</p>
+</section></section>
+<section><section id="optionserrorrecover" class="titleslide slide level1"><h1>options(error=recover)</h1></section></section>
+<section><section id="optionswarn" class="titleslide slide level1"><h1>options(warn)</h1></section></section>
+<section><section id="traceback" class="titleslide slide level1"><h1>traceback()</h1></section></section>
+<section><section id="debug-undebug" class="titleslide slide level1"><h1>debug() &amp; undebug()</h1></section></section>
+<section><section id="browser-if-theres-no-error" class="titleslide slide level1"><h1>browser() if there’s no error</h1></section><section id="note-that-going-next-breaks-out-but-errors-dont" class="slide level2">
+<h1>Note that going next breaks out, but errors don’t</h1>
+</section></section>
+<section><section id="look-up-trace" class="titleslide slide level1"><h1>Look up trace()</h1></section><section id="todo-summary-with-advantages---prufen-ob-das-alles-erwahnt-wird" class="slide level2">
 <h1>TODO SUMMARY with advantages - Prüfen, ob das alles erwähnt wird…</h1>
 <p>Probleme bei klassischen error handling:</p>
 <ul>
@@ -1139,6 +1143,7 @@ test &lt;-<span class="st"> </span>function() {
 <h1>References</h1>
 <p>Download of these slides: <a href="https://github.com/aryoda/R_trainings" class="uri">https://github.com/aryoda/R_trainings</a></p>
 <p>Project home of the <code>tryCatchLog</code> package: <a href="https://github.com/aryoda/tryCatchLog" class="uri">https://github.com/aryoda/tryCatchLog</a></p>
+<p><a href="http://www.biostat.jhsph.edu/~rpeng/docs/R-debug-tools.pdf" class="uri">http://www.biostat.jhsph.edu/~rpeng/docs/R-debug-tools.pdf</a></p>
 </section></section>
     </div>
   </div>

@@ -944,7 +944,21 @@ Add FAQ section with
 - Why does tryCatchLog() not support other condition handler besides error (e. g. warning or message)?
   -> only required for logging! If you want to convert warnings into errors use the standard R method (option)
   
-  
+Section with best practices (Usage Guide?):
+- Fehler protokolieren darf grundsätzlich nur der, der die Exceptions schlussendlich fängt und behandelt.
+- An sich sollte man sich deshalb eigentlich angewöhnen, auf der obersten Codeebene ein "catch (Throable t) { handleUncatchedThrowable(t) }" oder sowas stehen zu haben, das zu nem geordneten Programmabbruch führt.
+- find the right point for a graceful recovery
+
+
+# options(error=recover)
+# options(warn)
+# traceback()
+# debug() & undebug()
+# browser() if there's no error
+## Note that going next breaks out, but errors don't
+# Look up trace()
+
+
 
 ## TODO SUMMARY with advantages - Prüfen, ob das alles erwähnt wird...
 
@@ -971,4 +985,7 @@ Vorteile von tryCatchLog
 Download of these slides: https://github.com/aryoda/R_trainings
 
 Project home of the `tryCatchLog` package: https://github.com/aryoda/tryCatchLog
+
+http://www.biostat.jhsph.edu/~rpeng/docs/R-debug-tools.pdf
+
 

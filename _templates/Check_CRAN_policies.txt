@@ -1,0 +1,42 @@
+How to check for cross-platform portable code before submitting a package to CRAN
+=================================================================================
+
+
+
+R-Package-Devel, which is focused on this topic:
+
+https://stat.ethz.ch/mailman/listinfo/r-package-devel
+
+---
+
+We should also mention the continuous integration (CI) services
+provided for free by Travis (Linux and macOS) and AppVeyor (Windows)
+in combination with GitHub (or GitLab, ...).  By adding simple
+.travis.yml and appveyor.yml to your Git repos (e.g.
+https://github.com/HenrikBengtsson/globals), they run R CMD check
+--as-cran and covr::package_coverage() etc for you more or less on the
+fly, e.g.
+
+* https://travis-ci.org/HenrikBengtsson/globals
+* https://ci.appveyor.com/project/HenrikBengtsson/globals
+
+---
+
+If you don't have access to Windows, submit it to
+win-builder.r-project.org for testing.  Mac OS and Solaris are currently 
+harder to test without setting up your own local systems.
+
+As the CRAN Policies suggests, there's also the very
+handy winbuilder service (https://win-builder.r-project.org/) you can
+use to check your package on Windows.
+
+---
+
+R Hub.
+
+These days I just do    'rhub::check_for_cran()'   and four tests launch
+covering the three required OSs as well as the required r-devel and r-release
+versions.  Results tickle in within minutes by mail; the windows one (which
+is slowest) is also display.  You need a one-time token handshake.
+
+---

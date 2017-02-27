@@ -18,3 +18,12 @@ http://unlicense.org/
 
 AGPLv3
 http://www.gnu.org/licenses/agpl-3.0.html
+
+
+------------
+
+Nicht alle Creative-Commons-Lizenzen sind auch freie Lizenzen.
+
+Wirklich freie Creative-Commons Lizenzen sind z. B. CC BY oder CC BY-SA, wie sie auch die Wikipedia nutzt.
+
+Die NC- und ND-Attribute machen Inhalte/Werke unfrei!

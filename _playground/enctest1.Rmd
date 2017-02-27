@@ -1,0 +1,22 @@
+---
+output: html_document
+---
+
+# Ch1 š
+
+```{r, include=FALSE}
+library(DT)
+Sys.setlocale(locale = "Lithuanian")
+```
+
+```{r, echo = FALSE}
+x <- iconv(c("ą č ę ė į š ų ū 9 0 ž", "3254"), to = "UTF-8")
+DF <- data.frame(x = x)
+datatable(DF)
+```
+
+```{r}
+x
+Encoding(x)
+```
+
