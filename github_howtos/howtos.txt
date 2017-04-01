@@ -1,0 +1,3 @@
+A Beginner’s Guide to Travis-CI for R:
+
+https://www.r-bloggers.com/a-beginners-guide-to-travis-ci-for-r/
