@@ -1,0 +1,124 @@
+non-infectious license for R package?
+
+Source: Question and discussions at r-devel mailing list starting 03/24/2017
+
+Some Quotes:
+
+Now for the question: To efficiently get the data into R, I assume a
+package (possibly in C or C++) is the most reasonable way? If yes,
+would such a package automatically be infected by the GPL? If the
+package links to (proprietary closed source) libraries to efficiently
+access the data, would the libraries in turn be infected?
+
+...
+
+
+Is the R-C-interface infectious per se, even when data flows only into R, not
+vice versa? If its infectious, could just the very core of R be
+licensed additionally under a non-infectious license?
+
+Furthermore, can I avoid infecting my full software stack, for example
+by making only the package open source under a permissive license? Are
+there any guidelines how to legally bridge between the proprietary and
+the R-world?
+
+---
+
+This FAQ seems to answer your question:
+
+https://www.gnu.org/licenses/gpl-faq.en.html#IfInterpreterIsGPL
+
+I read this to mean that the answer may be different depending on whether your code links against R libraries or simply uses R as an interpreter.
+
+---
+
+you cannot change existing licenses on software, R or otherwise.
+That is only something that the copyright holder(s) can do and you are not one of them.
+
+The GPL has a FAQ here:
+
+https://www.gnu.org/licenses/gpl-faq.en.html
+
+that you may find enlightening.
+
+A very general statement, which is that if your compiled code (in whatever language) does not "link" against R's libraries and does not directly contain GPL licensed code (e.g. copying and pasting R Foundation copyrighted source code into yours), that is one way to steer clear of the viral part of the GPL license vis-a-vis R, if you want to, but not the only way and not a guarantee either. There can be nuances, some of which are covered in the FAQ above.
+
+On the other hand, if your compiled code is linking to R's libraries, which you seem to suggest may be the case below, then your code, at least the relevant parts of it, will need to be licensed under a GPL compatible license.
+
+This again is part of the nuance, in terms of the scope of the impact on your code (all or parts) and where legal advice is needed, to steer clear of downstream potential issues that could result in legal and financial liabilities for you.
+
+you cannot change existing licenses on software, R or otherwise. That is only something that the copyright holder(s) can do and you are not one of them.
+
+The GPL has a FAQ here:
+
+  https://www.gnu.org/licenses/gpl-faq.en.html
+
+that you may find enlightening.
+
+A very general statement, which is that if your compiled code (in whatever language) does not "link" against R's libraries and does not directly contain GPL licensed code (e.g. copying and pasting R Foundation copyrighted source code into yours), that is one way to steer clear of the viral part of the GPL license vis-a-vis R, if you want to, but not the only way and not a guarantee either. There can be nuances, some of which are covered in the FAQ above.
+
+On the other hand, if your compiled code is linking to R's libraries, which you seem to suggest may be the case below, then your code, at least the relevant parts of it, will need to be licensed under a GPL compatible license.
+
+This again is part of the nuance, in terms of the scope of the impact on your code (all or parts) and where legal advice is needed, to steer clear of downstream potential issues that could result in legal and financial liabilities for you.
+
+---
+
+There are multiple packages that make the link between R and proprietary
+software. One example is R2WinBUGS which connects to WinBUGS, but there are
+a lot more of these.
+
+All of these use essentially the same idea:
+- create the package under a standard GPL license
+- use the (command line) interface provided by the proprietary software to
+connect with it, eg by calls to sytem(). That's exaclty how R2WinBUGS
+operates. It doesn't contain a single closed source library to achieve
+this, all those are kept within WinBUGS itself.
+
+---
+
+So including the closed source libraries as Mario wanted to do,
+is not accepted on CRAN.
+
+https://cran.r-project.org/web/packages/policies.html#Source-packages
+
+---
+
+Have the lawyers look at Microsoft R, it seems the license is not very
+catching ultimately.
+
+Perhaps you could use a similar ruse, or even align to that project instead.
+
+---
+
+The way I understand it, currently my options are quite
+limited: I would most likely need to use a remote procedure call API,
+and build one side of the API as GPL. But this would make the coupling
+much slower and more error-prone.
+
+I was actually hoping to give modellers very efficient access to big
+image analysis data (single cell results in multi-TB range). Currently
+R seems not easily combined with the classical closed-source company
+model. Are there considerations to release just the part that is
+required to build the interface to R under a more permissive license?
+
+I.e. I was thinking of something like this FAQ entry of the GPL: How
+can I allow linking of proprietary modules with my GPL-covered library
+under a controlled interface only? From
+
+https://www.gnu.org/licenses/gpl-faq.en.html#LinkingOverControlledInterface
+
+
+---
+
+As per the language included in the section of the FAQ that you reference above, if you want to go down that path, you would have to engage in formally communicating with the R Foundation, as the copyright holders of R, to solicit their formal position, which would be final. Note that depending upon the specifics, there may be other parties that would also have to render a decision, since other individuals also hold copyrights to included code in the standard R distribution and may or may not have given approval to the R Foundation to act on their behalf:
+
+  https://svn.r-project.org/R/trunk/doc/COPYRIGHTS
+
+If you wanted to pursue that avenue, you should communicate with the current R Foundation Co-Presidents:
+
+---
+
+There are, as you may be aware, commercial versions of R, that have been built upon the standard open source R distribution, which offer sufficient additional value that their customers are willing to pay for them. In some cases, these may include closed source components. A parallel of sorts would be a community based, open source version of a Linux server distribution (e.g. CentOS) versus a commercial offering (e.g. RHEL), where the latter has paid support options and other value added components and services that are revenue generating. In these commercial cases, as I referenced in my prior reply, legal counsel with expertise in open source licensing and intellectual property rights, will have rendered formal legal opinions to provide guidance and comfort that these for-profit businesses remain in conformance with license requirements to stay clear of any liabilities. No ethical business, in their right mind, would move forward without that.
+
+---
+

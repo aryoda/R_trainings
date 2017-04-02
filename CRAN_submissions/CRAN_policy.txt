@@ -1,0 +1,4 @@
+CRAN Repository Policy:
+-> describes the policies in place for the R package repository
+
+https://cran.r-project.org/web/packages/policies.html#Source-packages

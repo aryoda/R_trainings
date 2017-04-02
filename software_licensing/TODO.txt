@@ -13,6 +13,9 @@ https://www.gnu.org/licenses/license-list.en.html
 How to choose a license for your own work:
 https://www.gnu.org/licenses/license-recommendations.html
 
+GPL FAQ:
+https://www.gnu.org/licenses/gpl-faq.en.html
+
 CC0 ist best option for "public domain"
 https://www.gnu.org/licenses/license-list.en.html#CC0
 
@@ -36,7 +39,11 @@ http://gpl-violations.org/
 -> Legal FAQ
 -> Source code FAQ
 -> Vendor FAQ tries to give answers to questions asked by vendors/distributors of products including GPL-licensed software.
--> 
+
+
+Does the GPL require that source code of modified versions be posted to the public?
+https://www.gnu.org/licenses/gpl-faq.en.html#GPLRequireSourcePostedPublic
+
 
 ------------
 
