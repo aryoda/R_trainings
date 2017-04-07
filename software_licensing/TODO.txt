@@ -52,3 +52,37 @@ Nicht alle Creative-Commons-Lizenzen sind auch freie Lizenzen.
 Wirklich freie Creative-Commons Lizenzen sind z. B. CC BY oder CC BY-SA, wie sie auch die Wikipedia nutzt.
 
 Die NC- und ND-Attribute machen Inhalte/Werke unfrei!
+
+------------
+
+The organization has also shown a preference for “permissive” licenses,
+such as Apache, over “copyleft” licenses like the GPL, under which both GNU and Linux
+— the two major components of a Linux desktop distro — are licensed.
+This is understandable, as most corporate users and developers of open source prefer licenses
+hat keep the door open for them to employ the code into proprietary projects.
+
+-------------
+
+Torvalds at LinuxCon Part III: Permissive Licenses and Org Charts
+-> BSD use case
+
+http://fossforce.com/2016/09/torvalds-linuxcon-permissive-licenses-org-charts/
+
+“I think that if you actually want to create something bigger,
+and if you want to create a community around it, the BSD license is not necessarily a great license.
+
+“I mean, it’s worked fairly well, but you are going to have trouble finding outside developers
+who feel protected by a big company that says, ‘Hey, here’s this BSD license thing and we’re not making
+any promises because the copyright allows us to do anything, and allows you to do anything too.’
+But as an outside developer, I would not get the warm and fuzzies by that, because I’m like,
+‘Oh, this big company is going to take advantage of me,’ while the GPL says,
+‘Yes, the company may be big, but nobody’s ever going to take advantage of your code.
+It will remain free and nobody can take that away from you.’ I think that’s a big deal for community management.
+
+“It wasn’t something I was planning personally when I started, but over the years
+I’ve become convinced that the BSD license is great for code you don’t care about.
+
+I’ll use it myself. If there’s a library routine that I just want to say ‘hey,
+this is useful to anybody and I’m not going to maintain this,’ I’ll put it under the BSD license.”
+
+---------------
