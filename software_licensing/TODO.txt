@@ -47,11 +47,15 @@ https://www.gnu.org/licenses/gpl-faq.en.html#GPLRequireSourcePostedPublic
 
 ------------
 
-Nicht alle Creative-Commons-Lizenzen sind auch freie Lizenzen.
+Not all create commons licenses are free licenses.
 
-Wirklich freie Creative-Commons Lizenzen sind z. B. CC BY oder CC BY-SA, wie sie auch die Wikipedia nutzt.
+Really free creative commons licenses are e. g. CC BY or CC BY SA which are used by wikipedia too.
+
+The NC and ND attributes restricht the contents more than make them free.
 
 Die NC- und ND-Attribute machen Inhalte/Werke unfrei!
+
+https://creativecommons.org/licenses/by-sa/4.0/deed.en
 
 ------------
 
