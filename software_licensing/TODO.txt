@@ -90,3 +90,17 @@ I’ll use it myself. If there’s a library routine that I just want to say ‘
 this is useful to anybody and I’m not going to maintain this,’ I’ll put it under the BSD license.”
 
 ---------------
+
+Lizenz-Klarstellung gegen "Copyright-Trolle"
+
+https://www.heise.de/ct/artikel/Die-Neuerungen-von-Linux-4-14-3831941.html
+
+In den Linux-Quellen findet sich jetzt ein "Linux Kernel Enforcement Statement" genanntes Dokument. Mit ihm versucht eine Reihe von Linux-Entwicklern klarzustellen, wie sich ein Verstoß gegen die Lizenz des Linux-Kernels auf das Vertriebsrecht auswirkt. Was zunächst vielleicht nach langweiligem Juristen-Zeug klingt, hat größere Bedeutung – insbesondere für Firmen, Institutionen oder Personen in Deutschland, die GPL-lizensierte Software vertreiben. In die letzte Gruppe gehört auch der Linux-Kernel, der unter Version 2 der verbreiteten Open-Source-Lizenz steht.
+...
+Laut Informationen, die öffentlich oder hinter vorgehaltener Hand kursieren, bereichern sich Copyright-Trolle unter anderem mit Vertragsstrafen. Sie weisen beispielsweise Firmen oder Institutionen auf eine Lizenz-Verletzung hin, um parallel zur Beseitigung des Problems zum Unterzeichnen einer Unterlassungserklärung zu drängen. Später unterstellt der Troll dann eine weitere Copyright-Verletzung und macht die in der Unterlassungserklärung vereinbarte Vertragsstrafe geltend.
+Aus der GPLv3 übernommene Abschnitte.
+Aus der GPLv3 übernommene Abschnitte.
+
+Gegen derlei Vorgehen sollen zwei im Enforcement Statement des Linux-Kernels enthaltene Passagen helfen, die aus der GPLv3 übernommen wurden. Diese stellen klar, dass Unternehmen den Linux-Kernel nach Beseitigung der Lizenzverpflichtung erneut vertreiben dürfen. Außerdem geben sie den Unternehmen ein Zeitfenster von 30 Tagen, um die Verletzung aus der Welt zu schaffen. Laut einer gängigen Interpretation erlischt das Vertriebsrecht von GPLv2-lizenzierter Software bei einem Lizenzverstoß sofort; Copyright-Trolle nutzen das offenbar als Hebel, um Unternehmen unter Druck zu setzen.
+
+Die beiden Passagen sind allerdings keine Ergänzung der Lizenz des Kernels. Sie sind vielmehr eine Absichtserklärung jener Linux-Programmierer, die das Dokument für sich oder für ihr Unternehmen unterzeichnet haben. Beim Entstehen dieser Textzeilen hatten 105 Entwickler das Dokument signiert, darunter viele bekannten Größen wie Linus Torvalds, Greg Kroah-Hartman, David S. Miller oder Ingo Molnar. Die Autoren des Dokuments hoffen anscheinend, dass sich die Erklärung auf Gerichtsverfahren auswirkt. Eine offizielle Lizenz-Ergänzung wäre dabei natürlich ein besserer Hebel. Eine solche wäre aber schon allein durch die vielen Copyright-Halter wohl nur schwer umsetzbar, selbst wenn McHardy nicht einer von ihnen wäre. 

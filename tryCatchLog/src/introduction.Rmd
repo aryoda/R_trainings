@@ -1,5 +1,7 @@
 ---
-title: Error handling in R with tryCatchLog:</br>Catch, log and post-mortem analysis
+title: |
+       | Error handling in R with tryCatchLog:
+       | Catch, log and post-mortem analysis
 author: Jürgen Altfeld
 date: Dec. 2016</br></br></br><p style="font-size:0.5em">These slides have been created with RMarkdown and the package <a href="https://github.com/rstudio/revealjs">revealjs</a><p>
 description: some text to be displayed?
