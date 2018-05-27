@@ -1,0 +1,271 @@
+[1] "f1() called"
+[1] "f2() called"
+WARN [2017-06-08 23:13:31] NaNs produced
+Compact call stack:
+  1 source("logging_injector_tryCatchLog.R")
+  2 logging_injector_tryCatchLog.R#12: tryCatchLog({
+  3 logging_injector_tryCatchLog.R#13: source("your_code_file.R")
+  4 your_code_file.R#18: f1(1)
+  5 your_code_file.R#6: f2(value)
+  6 your_code_file.R#12: .signalSimpleWarning("NaNs produced", quote(log(-1)))
+Full call stack:
+  1 source("logging_injector_tryCatchLog.R")
+  2 withVisible(eval(ei, envir))
+  3 eval(ei, envir)
+  4 eval(ei, envir)
+  5 logging_injector_tryCatchLog.R#12: tryCatchLog({
+        source("your_code_file.R")
+    })
+  6 tryCatch(withCallingHandlers(expr, error = function(e) {
+        call.stack <- sys.calls()
+        log.message <- e$message
+        if (dump.errors.to.file == TRUE) {
+            dump.file.name <- format(Sys.time(), format = "dump_%Y%m%d_%H%M%S")
+            utils::dump.frames()
+            save.image(file = paste0(dump.file.name, ".rda"))
+            log.message <- paste0(log.message, "\nCall stack environments dumped into file: ", dump.file.name, ".rda")
+        }
+        futile.logger::flog.error(buildLogMessage(log.message, call.stack, 1))
+    }, warning = function(w) {
+        call.stack <- sys.calls()
+        futile.logger::flog.warn(buildLogMessage(w$message, call.stack, 1))
+        if (silent.warnings) {
+            invokeRestart("muffleWarning")
+        }
+        else {
+        }
+    }, message = function(m) {
+        call.stack <- sys.calls()
+        futile.logger::flog.info(buildLogMessage(m$message, call.stack, 1))
+        if (silent.messages) {
+            invokeRestart("muffleMessage")
+        }
+        else {
+        }
+    }), error = error, finally = finally)
+  7 tryCatchList(expr, classes, parentenv, handlers)
+  8 tryCatchOne(expr, names, parentenv, handlers[[1]])
+  9 doTryCatch(return(expr), name, parentenv, handler)
+  10 withCallingHandlers(expr, error = function(e) {
+        call.stack <- sys.calls()
+        log.message <- e$message
+        if (dump.errors.to.file == TRUE) {
+            dump.file.name <- format(Sys.time(), format = "dump_%Y%m%d_%H%M%S")
+            utils::dump.frames()
+            save.image(file = paste0(dump.file.name, ".rda"))
+            log.message <- paste0(log.message, "\nCall stack environments dumped into file: ", dump.file.name, ".rda")
+        }
+        futile.logger::flog.error(buildLogMessage(log.message, call.stack, 1))
+    }, warning = function(w) {
+        call.stack <- sys.calls()
+        futile.logger::flog.warn(buildLogMessage(w$message, call.stack, 1))
+        if (silent.warnings) {
+            invokeRestart("muffleWarning")
+        }
+        else {
+        }
+    }, message = function(m) {
+        call.stack <- sys.calls()
+        futile.logger::flog.info(buildLogMessage(m$message, call.stack, 1))
+        if (silent.messages) {
+            invokeRestart("muffleMessage")
+        }
+        else {
+        }
+    })
+  11 logging_injector_tryCatchLog.R#13: source("your_code_file.R")
+  12 withVisible(eval(ei, envir))
+  13 eval(ei, envir)
+  14 eval(ei, envir)
+  15 your_code_file.R#18: f1(1)
+  16 your_code_file.R#6: f2(value)
+  17 your_code_file.R#12: .signalSimpleWarning("NaNs produced", quote(log(-1)))
+  18 withRestarts({
+        .Internal(.signalCondition(simpleWarning(msg, call), msg, call))
+        .Internal(.dfltWarn(msg, call))
+    }, muffleWarning = function() NULL)
+  19 withOneRestart(expr, restarts[[1]])
+  20 doWithOneRestart(return(expr), restart)
+[1] "log(-1) = NaN"
+[1] "f2() returns"
+[1] "f1() returns"
+[1] "f1() called"
+[1] "f2() called"
+WARN [2017-06-08 23:13:31] NaNs produced
+Compact call stack:
+  1 source("logging_injector_tryCatchLog.R")
+  2 logging_injector_tryCatchLog.R#12: tryCatchLog({
+  3 logging_injector_tryCatchLog.R#13: source("your_code_file.R")
+  4 your_code_file.R#27: f1("not a number")
+  5 your_code_file.R#6: f2(value)
+  6 your_code_file.R#12: .signalSimpleWarning("NaNs produced", quote(log(-1)))
+Full call stack:
+  1 source("logging_injector_tryCatchLog.R")
+  2 withVisible(eval(ei, envir))
+  3 eval(ei, envir)
+  4 eval(ei, envir)
+  5 logging_injector_tryCatchLog.R#12: tryCatchLog({
+        source("your_code_file.R")
+    })
+  6 tryCatch(withCallingHandlers(expr, error = function(e) {
+        call.stack <- sys.calls()
+        log.message <- e$message
+        if (dump.errors.to.file == TRUE) {
+            dump.file.name <- format(Sys.time(), format = "dump_%Y%m%d_%H%M%S")
+            utils::dump.frames()
+            save.image(file = paste0(dump.file.name, ".rda"))
+            log.message <- paste0(log.message, "\nCall stack environments dumped into file: ", dump.file.name, ".rda")
+        }
+        futile.logger::flog.error(buildLogMessage(log.message, call.stack, 1))
+    }, warning = function(w) {
+        call.stack <- sys.calls()
+        futile.logger::flog.warn(buildLogMessage(w$message, call.stack, 1))
+        if (silent.warnings) {
+            invokeRestart("muffleWarning")
+        }
+        else {
+        }
+    }, message = function(m) {
+        call.stack <- sys.calls()
+        futile.logger::flog.info(buildLogMessage(m$message, call.stack, 1))
+        if (silent.messages) {
+            invokeRestart("muffleMessage")
+        }
+        else {
+        }
+    }), error = error, finally = finally)
+  7 tryCatchList(expr, classes, parentenv, handlers)
+  8 tryCatchOne(expr, names, parentenv, handlers[[1]])
+  9 doTryCatch(return(expr), name, parentenv, handler)
+  10 withCallingHandlers(expr, error = function(e) {
+        call.stack <- sys.calls()
+        log.message <- e$message
+        if (dump.errors.to.file == TRUE) {
+            dump.file.name <- format(Sys.time(), format = "dump_%Y%m%d_%H%M%S")
+            utils::dump.frames()
+            save.image(file = paste0(dump.file.name, ".rda"))
+            log.message <- paste0(log.message, "\nCall stack environments dumped into file: ", dump.file.name, ".rda")
+        }
+        futile.logger::flog.error(buildLogMessage(log.message, call.stack, 1))
+    }, warning = function(w) {
+        call.stack <- sys.calls()
+        futile.logger::flog.warn(buildLogMessage(w$message, call.stack, 1))
+        if (silent.warnings) {
+            invokeRestart("muffleWarning")
+        }
+        else {
+        }
+    }, message = function(m) {
+        call.stack <- sys.calls()
+        futile.logger::flog.info(buildLogMessage(m$message, call.stack, 1))
+        if (silent.messages) {
+            invokeRestart("muffleMessage")
+        }
+        else {
+        }
+    })
+  11 logging_injector_tryCatchLog.R#13: source("your_code_file.R")
+  12 withVisible(eval(ei, envir))
+  13 eval(ei, envir)
+  14 eval(ei, envir)
+  15 your_code_file.R#27: f1("not a number")
+  16 your_code_file.R#6: f2(value)
+  17 your_code_file.R#12: .signalSimpleWarning("NaNs produced", quote(log(-1)))
+  18 withRestarts({
+        .Internal(.signalCondition(simpleWarning(msg, call), msg, call))
+        .Internal(.dfltWarn(msg, call))
+    }, muffleWarning = function() NULL)
+  19 withOneRestart(expr, restarts[[1]])
+  20 doWithOneRestart(return(expr), restart)
+[1] "log(-1) = NaN"
+ERROR [2017-06-08 23:13:31] non-numeric argument to mathematical function
+Compact call stack:
+  1 source("logging_injector_tryCatchLog.R")
+  2 logging_injector_tryCatchLog.R#12: tryCatchLog({
+  3 logging_injector_tryCatchLog.R#13: source("your_code_file.R")
+  4 your_code_file.R#27: f1("not a number")
+  5 your_code_file.R#6: f2(value)
+  6 your_code_file.R#14: .handleSimpleError(function (e) 
+Full call stack:
+  1 source("logging_injector_tryCatchLog.R")
+  2 withVisible(eval(ei, envir))
+  3 eval(ei, envir)
+  4 eval(ei, envir)
+  5 logging_injector_tryCatchLog.R#12: tryCatchLog({
+        source("your_code_file.R")
+    })
+  6 tryCatch(withCallingHandlers(expr, error = function(e) {
+        call.stack <- sys.calls()
+        log.message <- e$message
+        if (dump.errors.to.file == TRUE) {
+            dump.file.name <- format(Sys.time(), format = "dump_%Y%m%d_%H%M%S")
+            utils::dump.frames()
+            save.image(file = paste0(dump.file.name, ".rda"))
+            log.message <- paste0(log.message, "\nCall stack environments dumped into file: ", dump.file.name, ".rda")
+        }
+        futile.logger::flog.error(buildLogMessage(log.message, call.stack, 1))
+    }, warning = function(w) {
+        call.stack <- sys.calls()
+        futile.logger::flog.warn(buildLogMessage(w$message, call.stack, 1))
+        if (silent.warnings) {
+            invokeRestart("muffleWarning")
+        }
+        else {
+        }
+    }, message = function(m) {
+        call.stack <- sys.calls()
+        futile.logger::flog.info(buildLogMessage(m$message, call.stack, 1))
+        if (silent.messages) {
+            invokeRestart("muffleMessage")
+        }
+        else {
+        }
+    }), error = error, finally = finally)
+  7 tryCatchList(expr, classes, parentenv, handlers)
+  8 tryCatchOne(expr, names, parentenv, handlers[[1]])
+  9 doTryCatch(return(expr), name, parentenv, handler)
+  10 withCallingHandlers(expr, error = function(e) {
+        call.stack <- sys.calls()
+        log.message <- e$message
+        if (dump.errors.to.file == TRUE) {
+            dump.file.name <- format(Sys.time(), format = "dump_%Y%m%d_%H%M%S")
+            utils::dump.frames()
+            save.image(file = paste0(dump.file.name, ".rda"))
+            log.message <- paste0(log.message, "\nCall stack environments dumped into file: ", dump.file.name, ".rda")
+        }
+        futile.logger::flog.error(buildLogMessage(log.message, call.stack, 1))
+    }, warning = function(w) {
+        call.stack <- sys.calls()
+        futile.logger::flog.warn(buildLogMessage(w$message, call.stack, 1))
+        if (silent.warnings) {
+            invokeRestart("muffleWarning")
+        }
+        else {
+        }
+    }, message = function(m) {
+        call.stack <- sys.calls()
+        futile.logger::flog.info(buildLogMessage(m$message, call.stack, 1))
+        if (silent.messages) {
+            invokeRestart("muffleMessage")
+        }
+        else {
+        }
+    })
+  11 logging_injector_tryCatchLog.R#13: source("your_code_file.R")
+  12 withVisible(eval(ei, envir))
+  13 eval(ei, envir)
+  14 eval(ei, envir)
+  15 your_code_file.R#27: f1("not a number")
+  16 your_code_file.R#6: f2(value)
+  17 your_code_file.R#14: .handleSimpleError(function (e) 
+    {
+        call.stack <- sys.calls()
+        log.message <- e$message
+        if (dump.errors.to.file == TRUE) {
+            dump.file.name <- format(Sys.time(), format = "dump_%Y%m%d_%H%M%S")
+            utils::dump.frames()
+            save.image(file = paste0(dump.file.name, ".rda"))
+            log.message <- paste0(log.message, "\nCall stack environments dumped into file: ", dump.file.name, ".rda")
+        }
+        futile.logger::flog.error(buildLogMessage(log.message, call.stack, 1))
+    }, "non-numeric argument to mathematical function", quote(log(value)))

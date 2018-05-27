@@ -1,3 +1,8 @@
+Package submission form:
+https://cran.r-project.org/submit.html
+
+
+
 CRAN Repository Policy:
 -> describes the policies in place for the R package repository
 
