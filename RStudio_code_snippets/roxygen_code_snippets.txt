@@ -1,0 +1,47 @@
+snippet rox.command
+	\command{${0:shell_cmd}}
+
+snippet rox.dontrun
+	\dontrun{
+	  ${0}
+	}
+
+snippet rox.code
+	\code{${0:expr}}
+
+snippet rox.code.highlighted
+	`${0:expr}`
+
+snippet rox.link
+	\link{${0}}
+
+snippet rox.link.code
+	\code{\link{${0:function}}}
+
+snippet rox.link.code.in.pkg
+	\code{\link[${0:package}]{{${1:function}}}
+
+snippet rox.link.pkg
+	\pkg{${0:package}}
+
+snippet rox.url
+	\url{${0:http}}
+
+snippet rox.bold
+	\strong{${0}}
+
+snippet rox.cr
+	\cr
+
+snippet rox.newline
+	\cr
+
+snippet rox.preformatted
+	\preformatted{
+	${0}
+	}
+
+snippet rox.enumerate
+	\enumerate{
+	\item{${0:item_text}}
+	}
