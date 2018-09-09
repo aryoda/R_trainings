@@ -108,3 +108,16 @@ Aus der GPLv3 übernommene Abschnitte.
 Gegen derlei Vorgehen sollen zwei im Enforcement Statement des Linux-Kernels enthaltene Passagen helfen, die aus der GPLv3 übernommen wurden. Diese stellen klar, dass Unternehmen den Linux-Kernel nach Beseitigung der Lizenzverpflichtung erneut vertreiben dürfen. Außerdem geben sie den Unternehmen ein Zeitfenster von 30 Tagen, um die Verletzung aus der Welt zu schaffen. Laut einer gängigen Interpretation erlischt das Vertriebsrecht von GPLv2-lizenzierter Software bei einem Lizenzverstoß sofort; Copyright-Trolle nutzen das offenbar als Hebel, um Unternehmen unter Druck zu setzen.
 
 Die beiden Passagen sind allerdings keine Ergänzung der Lizenz des Kernels. Sie sind vielmehr eine Absichtserklärung jener Linux-Programmierer, die das Dokument für sich oder für ihr Unternehmen unterzeichnet haben. Beim Entstehen dieser Textzeilen hatten 105 Entwickler das Dokument signiert, darunter viele bekannten Größen wie Linus Torvalds, Greg Kroah-Hartman, David S. Miller oder Ingo Molnar. Die Autoren des Dokuments hoffen anscheinend, dass sich die Erklärung auf Gerichtsverfahren auswirkt. Eine offizielle Lizenz-Ergänzung wäre dabei natürlich ein besserer Hebel. Eine solche wäre aber schon allein durch die vielen Copyright-Halter wohl nur schwer umsetzbar, selbst wenn McHardy nicht einer von ihnen wäre. 
+
+--------------
+
+static vs dynamic libraries:
+https://stackoverflow.com/questions/12237282/whats-the-difference-between-so-la-and-a-library-files
+
+licensing - LGPL requires dynamic linking in a commercial context, i.e. where you don't want to distribute your source
+
+# AGPL v3.0 - GNU Affero General Public License
+
+Die GNU Affero General Public License, kurz AGPL, ist eine von der Free Software Foundation, kurz FSF, unterstützte und veröffentlichte Copyleft-Lizenz, die derzeit in Version 3 vorliegt. Ihren Namen verdankt sie der Firma Affero, die die beiden Vorgängerversionen der AGPL entwickelt hat.
+
+ie AGPLv3 ist mit der GPLv3 kompatibel und wird von der FSF sogar gegenüber der GPLv3 empfohlen. Sie schließt das sogenannte GPL-Schlupfloch, indem sie die GPLv3 um einen Regelungsabschnitt ergänzt. Das Schlupfloch entsteht, wenn GPL-lizenzierter Code abgeändert und nur im Rahmen von Hosting oder ASP-Anwendungen eingesetzt wird, wodurch kein Anspruch auf Überlassung (Copyleft) des modifizierten Codes besteht.
