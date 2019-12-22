@@ -120,4 +120,8 @@ licensing - LGPL requires dynamic linking in a commercial context, i.e. where yo
 
 Die GNU Affero General Public License, kurz AGPL, ist eine von der Free Software Foundation, kurz FSF, unterstützte und veröffentlichte Copyleft-Lizenz, die derzeit in Version 3 vorliegt. Ihren Namen verdankt sie der Firma Affero, die die beiden Vorgängerversionen der AGPL entwickelt hat.
 
-ie AGPLv3 ist mit der GPLv3 kompatibel und wird von der FSF sogar gegenüber der GPLv3 empfohlen. Sie schließt das sogenannte GPL-Schlupfloch, indem sie die GPLv3 um einen Regelungsabschnitt ergänzt. Das Schlupfloch entsteht, wenn GPL-lizenzierter Code abgeändert und nur im Rahmen von Hosting oder ASP-Anwendungen eingesetzt wird, wodurch kein Anspruch auf Überlassung (Copyleft) des modifizierten Codes besteht.
+Die AGPLv3 ist mit der GPLv3 kompatibel und wird von der FSF sogar gegenüber der GPLv3 empfohlen. Sie schließt das sogenannte GPL-Schlupfloch, indem sie die GPLv3 um einen Regelungsabschnitt ergänzt. Das Schlupfloch entsteht, wenn GPL-lizenzierter Code abgeändert und nur im Rahmen von Hosting oder ASP-Anwendungen eingesetzt wird, wodurch kein Anspruch auf Überlassung (Copyleft) des modifizierten Codes besteht.
+
+> Die AGPL geht noch einen Schritt weiter [als die GPL] und verpflichtet dazu,
+> den Quellcode selbst dann zur Verfügung zu stellen, wenn er auf einem mit dem Netzwerk verbundenen Server
+> als Software-as-a-Service (SaaS) oder als Application Service Provider (ASP) verwendet wird.
