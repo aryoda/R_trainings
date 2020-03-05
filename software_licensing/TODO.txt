@@ -127,3 +127,34 @@ Die AGPLv3 ist mit der GPLv3 kompatibel und wird von der FSF sogar gegenüber de
 > Die AGPL geht noch einen Schritt weiter [als die GPL] und verpflichtet dazu,
 > den Quellcode selbst dann zur Verfügung zu stellen, wenn er auf einem mit dem Netzwerk verbundenen Server
 > als Software-as-a-Service (SaaS) oder als Application Service Provider (ASP) verwendet wird.
+
+
+-------------
+
+https://www.heise.de/forum/heise-online/News-Kommentare/Wegen-GPLv3-FreeBSD-wirft-GCC-raus/forum-445344/comment/
+
+https://resources.whitesourcesoftware.com/blog-whitesource/top-open-source-licenses-trends-and-predictions
+
+https://resources.whitesourcesoftware.com/blog-whitesource/top-10-open-source-software-licenses-of-2016-and-key-trends
+
+------------
+
+GPL-3 critics
+
+http://gplv3.fsf.org/rms-why.html
+
+https://www.linux-magazin.de/news/linspire-gplv3-wird-linux-schaden/
+
+https://www.heise.de/newsticker/meldung/Torvalds-bezieht-Stellung-zur-GPLv3-109394.html
+
+-------------
+
+FreeBSD eingesetzt von Juniper, NetAPP, Sony (Playstation 3 und 4) und macht erhebliche Teile von macOS aus.
+
+--------------
+
+das "schöne" bei den BSD-Lizenzen ist ja, dass man auch Geld mit verdienen kann, und dass man diese Lizenzen auch nicht auf die Produkte, die man damit verwendet, ausdehnen muss.
+Eine BSD-Lizenz ist also die Methode, mit der geistigen Arbeit anderer Geld zu verdienen.
+Bei GPL-Lizenzen muss man immer damit rechnen, dass irgendjemand einen vor Gericht zieht, bei BSD nie.
+
+
