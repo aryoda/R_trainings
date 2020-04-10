@@ -1,9 +1,27 @@
+There is a multiplicity of OSS licensing methods, falling into the two general classifications:
+- Permissive (such as BSD and Apache Foundation licenses)
+  Do not require modifications and enhancements to be generally available.
+  Prominent examples include the BSD (Berkeley Software Distribution) and Apache licenses.
+- Restrictive (such as GPL-licensed software)
+  Demand the software remains open and place strong limitations on any attempt to make proprietary closed products.
+  Changes to the code must be made available to future recipients.
+  A prominent example is the GPL (General Public License), a copyleft license.
+
+---
+
 Idea:
 
 Make slides to explain and compare the different software licenses
 and a decisions matrix to compare them
 
+! Choose the right license (licence differentiator tool):
+http://oss-watch.ac.uk/apps/licdiff/
+https://opensource.org/licenses/category
+https://choosealicense.com/
+https://tldrlegal.com/licenses/browse
+https://www.gnu.org/licenses/license-list.en.html
 
+---
       
 Helpful links giving input:
 
@@ -156,5 +174,134 @@ FreeBSD eingesetzt von Juniper, NetAPP, Sony (Playstation 3 und 4) und macht erh
 das "schöne" bei den BSD-Lizenzen ist ja, dass man auch Geld mit verdienen kann, und dass man diese Lizenzen auch nicht auf die Produkte, die man damit verwendet, ausdehnen muss.
 Eine BSD-Lizenz ist also die Methode, mit der geistigen Arbeit anderer Geld zu verdienen.
 Bei GPL-Lizenzen muss man immer damit rechnen, dass irgendjemand einen vor Gericht zieht, bei BSD nie.
+
+------------
+
+The Apache Software License is more permissive than the GPL
+
+-----------
+
+Licenses that Convey Patent Rights:
+
+Does a license convey [= übertragen?; "grant"] explicit patent rights from contributors to users?
+
+Yes:
+Apache 2.0
+GPL 3.0 and LGPL 3.0	
+MPL 1.0, 1.1, 2.0	
+EPL 1.0	
+CDDL 1.0	
+
+No:
+BSD 2-Clause, 3-Clause		
+MIT		
+GPL 2.0 and LGPL 2.1
+
+----------------
+
+System to measure and document open source license compliance
+https://www.fossology.org/
+https://www.linuxfoundation.org/press-release/2018/12/the-linux-foundation-to-launch-new-tooling-project-to-improve-open-source-compliance/
+-> scans all files (goal: automated compliance checks)
+
+ACT = Automated Compliance Tooling 
+The word "automated" in the ACT name is important. Having a smooth workflow with compliance evaluation built into the work flow end-to-end can only lead to speedier and more confident development and deployment, and integration with CI/CD methods. ACT welcomes additional tooling projects and offers a stable, neutral foundation for them with the support of the Linux Foundation.
+
+Running FOSSology in a container locally:
+
+1.  If you are on a
+Linux
+distribution, and you do not already have
+docker
+installed, this is probably as simple as:
+$ sudo yum install docker
+$ sudo zypper install docker
+$ sudo apt install docker.io
+picking the right command for your system.
+2.  You will need to start
+docker
+if it is not already running with:
+$ sudo systemctl start docker
+3.  Navigate to
+https://hub.docker.com/r/fossology/fossology/
+and read the instructions and requirements there.
+4.  Run the command:
+$ sudo docker pull fossology/fossology
+to download the image.
+
+5.  Start running the container with:
+$ sudo docker run -p 8081:80 fossology/fossology
+To run things locally with the browser interface you will need a web server running. On most
+Linux
+systems this will be
+Apache (httpd). If this is not already installed:
+
+6.
+$ sudo yum install httpd
+$ sudo apt install apache2
+$ sudo zypper install httpd
+picking the right command for your system.
+Start the web server with the appropriate command:
+$ sudo systemctl start httpd
+$ sudo systemctl start apache2
+
+7.  Now  point  your  browser  to http://localhost:8081/repo.
+    If you  have  succeeded  so  far,  you  will  see  the  same interface you saw on the online testing platform.
+
+8.  When you are done you will probably want to issue a docker stop ... command to kill your session.
+
+Please Note
+Depending on how your system is configured, you may not need to use
+sudo
+on the
+docker
+commands
+--------------
+
+Software Package Data Exchange (SPDX)
+https://spdx.org/
+
+The Software Package Data Exchange (SPDX) open standard provides a common format for sharing data about software copyrights, licenses, security information, etc.
+
+A project will include an SPDX file that consists of a series of tags and values, separated by a colon and space (there are other possible formats but this is the simplest one).
+
+Here is an example lifted from David Wheeler's excellent SPDX Tutorial:
+https://github.com/david-a-wheeler/spdx-tutorial
+
+SPDXVersion: SPDX-2.1
+DataLicense: CC0-1.0
+PackageName: FooPackage
+Originator: David A. Wheeler
+PackageHomePage: https://github.com/david-a-wheeler/spdx-tutorial/
+PackageLicenseDeclared: MIT
+
+The full list of possible tags can be found here:
+https://spdx.org/sites/cpstandard/files/pages/files/spdx_onepager.pdf
+
+---------
+
+Community Health Analytics Open Source Software (CHAOSS)
+
+The purpose is to develop tools and metrics for evaluation of the health of open source projects and ecosystems, with a view to increasing sustainability over time. This is important for stakeholders making good, informed decisions about how to be involved.
+
+The goals are:
+
+- Establish excellent metrics for measuring community activity, contributions, and health
+- Produce software tooling or doing the analysis
+- Build project health reports.
+
+--------------
+
+Mozilla Public License
+
+Änderungen müssen ebenfalls im Quellcode unter der MPL-2.0 veröffentlicht werden.
+
+Der Trick bei der MPL ist, dass sie pro Datei angewandt wird. Covered Software ist nicht ein abgeschlossenes Stück Software wie z.B. bei der GPL, sondern die Menge der Dateien, die explizit unter der MPL lizenziert wurden. Das kann alle Dateien eines Softwareprojekts betreffen oder nur eine Teilmenge. Im letzteren Fall stehen die nicht-MPL-Dateien unter irgendeiner anderen Lizenz und das Ergebnis nennt sich dann Larger Work.
+
+Konkret bedeutet dass, das Du ein MPL-2.0-Projekt nehmen und beliebige proprietäre Erweiterung hinzufügen kannst, solange diese in neuen Dateien landen. Änderungen an den schon vorhandenen Dateien musst Du im Quellcode veröffentlichen, aber das war es dann auch schon. Eine Verteilung in compilierter Form verpflichtet Dich nur zur Herausgabe der MPL-2.0-Quelldateien inklusive aller Deiner Änderungen, aber nicht zur Herausgabe Deiner hinzugefügten Dateien. Es ist auch nicht verpflichtend, dem Nutzer das eigenständige Bauen der Software zu ermöglichen.
+
+-----------
+
+    
 
 
